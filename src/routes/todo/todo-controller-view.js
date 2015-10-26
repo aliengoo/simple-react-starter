@@ -47,9 +47,7 @@ export default class TodoControllerView extends React.Component {
       alertError =
         (<div className="row">
           <Alert alertType="danger">
-            <pre>
-              {this.state.err}
-            </pre>
+            {this.state.err}
           </Alert>
         </div>);
     }

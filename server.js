@@ -33,6 +33,7 @@ app.get('/api/todos', function(req, res) {
 });
 
 app.put('/api/todo/complete/:id', function (req, res) {
+
   Todo.findById(req.params.id, function(err, todo) {
     if (err) {
       res.status(500).send({

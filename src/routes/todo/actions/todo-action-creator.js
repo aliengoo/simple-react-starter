@@ -61,9 +61,10 @@ class TodoActionCreator {
         todo
       });
     }, (err) => {
+      console.log(err);
       appDispatcher.dispatch({
         actionType: ActionTypes.COMPLETE_TODO_ERR,
-        err
+        err: err.message
       });
     });
   }
