@@ -11,12 +11,31 @@ export default class TodoInput extends React.Component {
 
   constructor() {
     super();
+    this.state = {
+      inProgress: false
+    };
+    this._onChange = this._onChange.bind(this);
     this._onClick = this._onClick.bind(this);
   }
 
   componentWillMount() {
-    todoStore.addChangeListener(() => {
+    todoStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    todoStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+    var inProgress = todoStore.getInProgress();
+
+    // assume the process completed
+    if (!inProgress) {
       this.refs.todoInput.value = '';
+    }
+
+    this.setState({
+      inProgress: inProgress
     });
   }
 
@@ -26,14 +45,25 @@ export default class TodoInput extends React.Component {
 
   render() {
     return (
-      <div>
         <InputGroup>
-          <input type="text" className="form-control input-lg" placeholder="Enter your todo here..." ref="todoInput"/>
+
+          <input
+            disabled={this.state.inProgress}
+            type="text"
+            className="form-control input-lg"
+            placeholder="Enter your todo here..."
+            ref="todoInput"/>
+
           <InputGroupBtn>
-            <button className="btn btn-primary btn-lg" type="button" onClick={this._onClick}>Add</button>
+
+            <button
+              disabled={this.state.inProgress}
+              className="btn btn-primary btn-lg"
+              type="button"
+              onClick={this._onClick}>Add</button>
+
           </InputGroupBtn>
         </InputGroup>
-      </div>
     );
   }
 }

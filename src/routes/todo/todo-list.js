@@ -4,30 +4,41 @@ import React from 'react';
 import TodoListItem from './todo-list-item';
 import todoActionCreator from './actions/todo-action-creator';
 import todoStore from './store/todo-store';
-import _ from 'lodash';
 
 export default class TodoList extends React.Component {
 
-  render() {
-    return (
-      <div className="col-sm-12">
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Task</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-          {this.props.todos.map(function(todo){
-            return (
-              <TodoListItem todo={todo} key={todo.key}/>
-            );
-          })}
-          </tbody>
-        </table>
-      </div>
-    );
+  constructor() {
+    super();
+    this.state = {
+      todos: []
+    };
+
+    this._onChange = this._onChange.bind(this);
   }
 
+  componentWillMount() {
+    todoStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    todoStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+    this.setState({
+      todos: todoStore.getTodos()
+    });
+  }
+
+  render() {
+    var rows = this.state.todos.map((todo) => <TodoListItem todo={todo} key={todo.key}/>);
+
+    return (
+        <table className="table table-bordered">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+    );
+  }
 }

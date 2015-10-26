@@ -3,17 +3,17 @@ var glp = require('gulp-load-plugins')({
   lazy: true
 });
 var browserify = require('browserify');
+var watchify = require('watchify');
 var babelify = require('babelify');
 var path = require('path');
 var source = require('vinyl-source-stream');
 
 gulp.task('browserify', function (done) {
 
-  browserify({
-    entries: path.join("./src", "main.js"),
-    extensions: ['.js'],
-    debug: true
-  })
+  var args = watchify.args;
+  args.extensions = ['.js'];
+
+  watchify(browserify(path.join("./src", "main.js"), args), args)
     .transform(babelify)
     .bundle()
     .on('error', function(err){
@@ -58,7 +58,6 @@ gulp.task('default', ['app:css', 'browserify', 'webserver'], function () {
 gulp.task('webserver', function () {
   return gulp.src('wwwroot').pipe(glp.webserver({
     port:9190,
-    host:"hq02729",
     livereload: true
   }));
 });

@@ -13,25 +13,23 @@ class TodoStore extends EventEmitter {
   constructor() {
     super();
 
-    // initial state
-    Object.defineProperty(this, "_todos", {
-      writable: true,
-      value: []
-    });
-
-    Object.defineProperty(this, "_inProgress", {
-      writable: true,
-      value: false
-    });
-
-    Object.defineProperty(this, "_err", {
-      writable: true,
-      value: undefined
-    });
-
-    Object.defineProperty(this, "_dispatchToken", {
-      writable: true,
-      value: undefined
+    Object.defineProperties(this, {
+      "_todos": {
+        value: [],
+        writable: true
+      },
+      "_inProgress": {
+        writable: true,
+        value: false
+      },
+      "_err": {
+        writable: true,
+        value: undefined
+      },
+      "_dispatchToken": {
+        writable: true,
+        value: undefined
+      }
     });
   }
 
@@ -130,33 +128,32 @@ todoStore.setDispatchToken(appDispatcher.register(function (action) {
     case ActionTypes.ADD_TODO_STARTED:
     case ActionTypes.COMPLETE_TODO_STARTED:
     case ActionTypes.FIND_ALL_TODOS_STARTED:
-      // set the current state to be in progress
       todoStore.setInProgress(true);
-      todoStore.emitChange();
       break;
     case ActionTypes.ADD_TODO_ENDED:
       todoStore.addTodo(action.todo);
       todoStore.setErr(undefined);
-      todoStore.emitChange();
+      todoStore.setInProgress(false);
       break;
     case ActionTypes.COMPLETE_TODO_ENDED:
       todoStore.completeTodo(action.todo);
       todoStore.setErr(undefined);
-      todoStore.emitChange();
+      todoStore.setInProgress(false);
       break;
     case ActionTypes.FIND_ALL_TODOS_ENDED:
       todoStore.setTodos(action.todos);
+      todoStore.setInProgress(false);
       todoStore.setErr(undefined);
-      todoStore.emitChange();
       break;
     case ActionTypes.ADD_TODO_ERR:
     case ActionTypes.COMPLETE_TODO_ERR:
     case ActionTypes.FIND_ALL_TODOS_ERR:
+      todoStore.setInProgress(false);
       todoStore.setErr(action.err);
-      todoStore.emitChange();
       break;
   }
 
+  todoStore.emitChange();
   return true;
 
 }));

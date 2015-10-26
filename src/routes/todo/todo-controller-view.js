@@ -15,8 +15,7 @@ export default class TodoControllerView extends React.Component {
   constructor() {
     super();
     this.state = {
-      err: undefined,
-      todos: []
+      err: undefined
     };
     this._onChange = this._onChange.bind(this);
   }
@@ -35,8 +34,7 @@ export default class TodoControllerView extends React.Component {
 
   _onChange() {
     this.setState({
-      err: todoStore.getErr(),
-      todos: todoStore.getTodos()
+      err: todoStore.getErr()
     });
   }
 
@@ -60,11 +58,16 @@ export default class TodoControllerView extends React.Component {
         </PageHeader>
 
         <div className="row">
-          <TodoInput/>
+          <div className="col-sm-12">
+            <TodoInput/>
+            <hr/>
+          </div>
         </div>
 
         <div className="row">
-          <TodoList todos={this.state.todos}/>
+          <div className="col-sm-12">
+            <TodoList/>
+          </div>
         </div>
         {alertError}
       </div>
