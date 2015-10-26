@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from '../../shared/nav-bar.jsx';
+import NavBar from '../../shared/nav-bar';
 
 export default class App extends React.Component {
   render() {

@@ -10,8 +10,8 @@ var source = require('vinyl-source-stream');
 gulp.task('browserify', function (done) {
 
   browserify({
-    entries: path.join("./src", "main.jsx"),
-    extensions: ['.jsx'],
+    entries: path.join("./src", "main.js"),
+    extensions: ['.js'],
     debug: true
   })
     .transform(babelify)
@@ -51,12 +51,14 @@ gulp.task('app:css', function () {
 gulp.task('default', ['app:css', 'browserify', 'webserver'], function () {
   glp.livereload.listen();
 
-  gulp.watch('./src/**/*.jsx', ['browserify']);
+  gulp.watch('./src/**/*.js', ['browserify']);
   gulp.watch('./src/**/*.scss', ['app:css']);
 });
 
 gulp.task('webserver', function () {
-  gulp.src('wwwroot').pipe(glp.webserver({
+  return gulp.src('wwwroot').pipe(glp.webserver({
+    port:9190,
+    host:"hq02729",
     livereload: true
   }));
 });

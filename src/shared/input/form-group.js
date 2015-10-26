@@ -1,6 +1,6 @@
 import React from 'react';
 
-class FormGroup extends React.Component {
+export default class FormGroup extends React.Component {
 
   render() {
     return (
@@ -10,5 +10,3 @@ class FormGroup extends React.Component {
     );
   }
 }
-
-export default FormGroup;

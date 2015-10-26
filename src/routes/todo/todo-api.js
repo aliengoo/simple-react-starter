@@ -3,7 +3,7 @@ import Q from 'q';
 
 const URI = "http://localhost:3000/api/";
 
-export default class CustomerApi {
+export default class TodoApi {
 
   constructor() {
     this._responseHandler = function (defer) {
@@ -21,7 +21,7 @@ export default class CustomerApi {
     var defer = Q.defer();
 
     request
-      .get(`${URI}customers`)
+      .get(`${URI}todos`)
       .accept('json')
       .end(this._responseHandler(defer));
 
@@ -32,7 +32,7 @@ export default class CustomerApi {
     var defer = Q.defer();
 
     request
-      .get(`${URI}customer/${id}`)
+      .get(`${URI}todo/${id}`)
       .accept('json')
       .end(this._responseHandler(defer));
 
@@ -43,30 +43,41 @@ export default class CustomerApi {
     var defer = Q.defer();
 
     request
-      .del(`${URI}customer/${id}`)
+      .del(`${URI}todo/${id}`)
       .accept('json')
       .end(this._responseHandler(defer));
 
     return defer.promise;
   }
 
-  save(customer) {
+  complete(id) {
+    var defer = Q.defer();
+
+    request
+      .put(`${URI}todo/complete/${id}`)
+      .accept('json')
+      .end(this._responseHandler(defer));
+
+    return defer.promise;
+  }
+
+  save(todo) {
 
     var defer = Q.defer();
 
-    if (customer._id) {
+    if (todo._id) {
       request
-        .put(`${URI}customer/${customer._id}`)
+        .put(`${URI}todo/${todo._id}`)
         .type('json')
         .accept('json')
-        .send(customer)
+        .send(todo)
         .end(this._responseHandler(defer));
     } else {
       request
-        .post(`${URI}customer`)
+        .post(`${URI}todo`)
         .type('json')
         .accept('json')
-        .send(customer)
+        .send(todo)
         .end(this._responseHandler(defer));
     }
     return defer.promise;

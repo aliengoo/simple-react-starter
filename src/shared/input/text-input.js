@@ -4,11 +4,6 @@ import ControlLabel from './control-label.jsx';
 
 export default class TextInput extends React.Component {
   render() {
-
-    if (!this.props.label) {
-      this.props.label = "Shit, no label";
-    }
-
     return (
       <FormGroup>
         <ControlLabel>{this.props.label}</ControlLabel>
@@ -23,7 +18,7 @@ export default class TextInput extends React.Component {
   }
 }
 
-TextInput.propTyopes = {
+TextInput.propTypes = {
   placeholder: React.PropTypes.string,
   name: React.PropTypes.string,
   label: React.PropTypes.string,

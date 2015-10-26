@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ControlLabel extends React.Component {
+export default class ControlLabel extends React.Component {
   render() {
     return (
       <label className="control-label">
@@ -8,5 +8,3 @@ class ControlLabel extends React.Component {
       </label>);
   }
 }
-
-export default ControlLabel;

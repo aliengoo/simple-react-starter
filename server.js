@@ -11,42 +11,66 @@ app.use(cors());
 
 mongoose.connect("mongodb://localhost/simple-react-starter");
 
-var Customer = mongoose.model('Customer', {
-  firstName: String,
-  middleNames: String,
-  lastName: String
+var Todo = mongoose.model('Todo', {
+  text: String,
+  completed: {
+    type: Boolean,
+    "default": false
+  }
 });
 
 
-app.get('/api/customers', function(req, res) {
-  Customer.find().exec(function (err, customers) {
+app.get('/api/todos', function(req, res) {
+  Todo.find().exec(function (err, todos) {
     if(err) {
       res.status(500).send({
         err: err
       });
     } else {
-      res.json(customers);
+      res.json(todos);
     }
   });
 });
 
-app.post('/api/customer', function (req, res) {
-  var customer = new Customer(req.body);
-  console.log(req.body);
-
-  customer.save(function (err) {
+app.put('/api/todo/complete/:id', function (req, res) {
+  Todo.findById(req.params.id, function(err, todo) {
     if (err) {
       res.status(500).send({
         err: err
       });
     } else {
-      res.json(customer);
+      todo.completed = true;
+
+      todo.save(function (err) {
+        if (err) {
+          res.status(500).send({
+            err: err
+          });
+        } else {
+          res.json(todo);
+        }
+      });
+    }
+  })
+});
+
+app.post('/api/todo', function (req, res) {
+  var todo = new Todo(req.body);
+  console.log(req.body);
+
+  todo.save(function (err) {
+    if (err) {
+      res.status(500).send({
+        err: err
+      });
+    } else {
+      res.json(todo);
     }
   });
 });
 
-app.delete('/api/customer/:id', function (req, res) {
-  Customer.remove({_id: req.params.id}, function (err){
+app.delete('/api/todo/:id', function (req, res) {
+  Todo.remove({_id: req.params.id}, function (err){
     if (err) {
       res.status(500).send({
         err: err
@@ -60,18 +84,15 @@ app.delete('/api/customer/:id', function (req, res) {
 
 });
 
-app.put('/api/customer/:id', function (req, res) {
 
-});
-
-app.get('/api/customer/:id', function (req, res) {
-  Customer.findById(req.params.id, function(err, customer) {
+app.get('/api/todo/:id', function (req, res) {
+  Todo.findById(req.params.id, function(err, todo) {
     if (err) {
       res.status(500).send({
         err: err
       });
     } else {
-      res.json(customer);
+      res.json(todo);
     }
   })
 });
