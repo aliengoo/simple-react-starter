@@ -52,7 +52,8 @@ class TodoActionCreator {
 
   completeTodo(id) {
     appDispatcher.dispatch({
-      actionType: ActionTypes.COMPLETE_TODO_STARTED
+      actionType: ActionTypes.COMPLETE_TODO_STARTED,
+      id: id
     });
 
     this._api.complete(id).then((todo) => {

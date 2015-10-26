@@ -22,6 +22,10 @@ class TodoStore extends EventEmitter {
         writable: true,
         value: false
       },
+      "_completingId": {
+        writable: true,
+        value: undefined
+      },
       "_err": {
         writable: true,
         value: undefined
@@ -99,6 +103,14 @@ class TodoStore extends EventEmitter {
     this._todos = temp;
   }
 
+  setCompletingId(completingId) {
+    this._completingId = completingId;
+  }
+
+  getCompletingId() {
+    return this._completingId;
+  }
+
   getInProgress() {
     return this._inProgress;
   }
@@ -126,7 +138,12 @@ var todoStore = new TodoStore();
 todoStore.setDispatchToken(appDispatcher.register(function (action) {
   switch (action.actionType) {
     case ActionTypes.ADD_TODO_STARTED:
+      todoStore.setInProgress(true);
+      break;
     case ActionTypes.COMPLETE_TODO_STARTED:
+      todoStore.setCompletingId(action.id);
+      todoStore.setInProgress(true);
+      break;
     case ActionTypes.FIND_ALL_TODOS_STARTED:
       todoStore.setInProgress(true);
       break;
@@ -136,6 +153,7 @@ todoStore.setDispatchToken(appDispatcher.register(function (action) {
       todoStore.setInProgress(false);
       break;
     case ActionTypes.COMPLETE_TODO_ENDED:
+      todoStore.setCompletingId(undefined);
       todoStore.completeTodo(action.todo);
       todoStore.setErr(undefined);
       todoStore.setInProgress(false);
@@ -147,6 +165,7 @@ todoStore.setDispatchToken(appDispatcher.register(function (action) {
       break;
     case ActionTypes.ADD_TODO_ERR:
     case ActionTypes.COMPLETE_TODO_ERR:
+      todoStore.setCompletingId(undefined);
     case ActionTypes.FIND_ALL_TODOS_ERR:
       todoStore.setInProgress(false);
       todoStore.setErr(action.err);

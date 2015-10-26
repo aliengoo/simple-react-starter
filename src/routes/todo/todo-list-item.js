@@ -30,9 +30,9 @@ export default class TodoListItem extends React.Component {
   }
 
   _onChange() {
-    console.log("hcnaindcwef");
     this.setState({
-      inProgress: todoStore.getInProgress()
+      inProgress: todoStore.getInProgress(),
+      completingId: todoStore.getCompletingId()
     });
   }
 
@@ -45,7 +45,7 @@ export default class TodoListItem extends React.Component {
 
     var content = <span>Completed</span>;
 
-    if (this.state.inProgress) {
+    if (this.state.inProgress && this.props.todo._id === this.state.completingId) {
       content = <span>Completing...</span>;
     }
 
