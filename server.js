@@ -3,9 +3,11 @@
 var express = require("express")
   , bodyParser = require('body-parser')
   , cors = require('cors'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  delay = require('express-delay');
 
 var app = express();
+app.use(delay(2000));
 app.use(bodyParser.json());
 app.use(cors());
 
