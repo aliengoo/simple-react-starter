@@ -27,6 +27,7 @@
     "gulp-webserver": "^0.9.1",
     "mongodb": "^2.0.46",
     "mongoose": "^4.2.2",
+    "redux-devtools": "^2.1.5",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.5.0"
   },

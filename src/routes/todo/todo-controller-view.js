@@ -11,6 +11,8 @@ import {connect} from 'react-redux';
 import {findAllTodos} from './actions/todo-find-all-actions';
 import {addTodo} from './actions/todo-add-todo-actions';
 import {completeTodo} from './actions/todo-complete-todo-actions';
+import {removeTodo} from './actions/todo-remove-todo-actions';
+import {newItemTextChanged} from './actions/todo-new-item-text-changed-action';
 
 class TodoControllerView extends React.Component {
 
@@ -23,7 +25,7 @@ class TodoControllerView extends React.Component {
   }
 
   render() {
-    const {dispatch, todos, inProgress, completingId, err} = this.props;
+    const {dispatch, todos, inProgress, completingId, err, newItemText} = this.props;
 
     var alertError = <div></div>;
 
@@ -44,7 +46,11 @@ class TodoControllerView extends React.Component {
 
         <div className="row">
           <div className="col-sm-12">
-            <TodoInput addTodoClick={(text) => dispatch(addTodo(text))} inProgress={inProgress}/>
+            <TodoInput
+              onChange={(e) => dispatch(newItemTextChanged(e.target.value))}
+              addTodoClick={() => dispatch(addTodo(newItemText))}
+              inProgress={inProgress}
+              newItemText={newItemText}/>
             <hr/>
           </div>
         </div>
@@ -55,6 +61,7 @@ class TodoControllerView extends React.Component {
               todos={todos}
               inProgress={inProgress}
               completingId={completingId}
+              removeTodoClick={(id) => dispatch(removeTodo(id))}
               completeTodoClick={(id) => dispatch(completeTodo(id))}/>
           </div>
         </div>
@@ -69,6 +76,7 @@ class TodoControllerView extends React.Component {
 function select(state) {
 
   return {
+    newItemText: state.newItemText,
     todos: state.todos,
     inProgress: state.inProgress,
     completingId: state.completingId,

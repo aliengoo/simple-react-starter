@@ -3,23 +3,29 @@
 import React, {Component, PropTypes} from 'react';
 import InputGroup from '../../shared/input/input-group';
 import InputGroupBtn from '../../shared/input/input-group-btn';
+import instance from './store/todo-store';
 
 export default class TodoInput extends React.Component {
 
-  constructor() {
-    super();
-    this._onClick = this._onClick.bind(this);
-  }
-  _onClick() {
-    this.props.addTodoClick(this.refs.todoInput.value);
+  componentDidMount() {
+    var store = instance();
+
+    store.subscribe(() => {
+      var state = store.getState();
+
+      if (state.newItemText !== this.refs.todoInput.value) {
+        this.refs.todoInput.value = state.newItemText;
+      }
+    });
   }
 
   render() {
-    const {inProgress} = this.props;
+    const {onChange, inProgress, addTodoClick} = this.props;
 
     var input = (<input
       disabled={inProgress}
       type="text"
+      onChange={onChange}
       className="form-control input-lg"
       placeholder="Enter your todo here..."
       ref="todoInput"/>);
@@ -33,7 +39,7 @@ export default class TodoInput extends React.Component {
             disabled={inProgress}
             className="btn btn-primary btn-lg"
             type="button"
-            onClick={this._onClick}>Add
+            onClick={addTodoClick}>Add
           </button>
 
         </InputGroupBtn>
@@ -43,6 +49,8 @@ export default class TodoInput extends React.Component {
 }
 
 TodoInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  newItemText: PropTypes.string,
   inProgress: PropTypes.bool,
   addTodoClick: PropTypes.func.isRequired
 };

@@ -4,19 +4,20 @@ import ActionTypes from '../actions/todo-action-types';
 import _ from 'lodash';
 import { combineReducers } from 'redux';
 
+function newItemText(state = "", action) {
+  if (action.type.endsWith("_ENDED")) {
+    return "";
+  }
+
+  return action.text || state;
+}
+
 // acts on the inProgress part of state
 function inProgress(state = false, action) {
-  switch (action.type) {
-    case ActionTypes.ADD_TODO_STARTED:
-    case ActionTypes.COMPLETE_TODO_STARTED:
-    case ActionTypes.FIND_ALL_TODOS_STARTED:
-      return true;
-      break;
-    case ActionTypes.ADD_TODO_ENDED:
-    case ActionTypes.COMPLETE_TODO_ENDED:
-    case ActionTypes.FIND_ALL_TODOS_ENDED:
-      return false;
-      break;
+  if (action.type.endsWith("_STARTED")) {
+    return true;
+  } else if (action.type.endsWith("_ENDED") || action.type.endsWith("_ERR")) {
+    return false;
   }
 
   return state;
@@ -26,7 +27,6 @@ function completingId(state = "", action) {
 
   switch (action.type) {
     case ActionTypes.COMPLETE_TODO_STARTED:
-      console.log(action);
       return action.id;
       break;
     case ActionTypes.COMPLETE_TODO_ERR:
@@ -39,11 +39,9 @@ function completingId(state = "", action) {
 }
 
 function err(state = "", action) {
-  switch (action.type) {
-    case ActionTypes.ADD_TODO_ERR:
-    case ActionTypes.COMPLETE_TODO_ERR:
-    case ActionTypes.FIND_ALL_TODOS_ERR:
-      return action.err;
+
+  if (action.type.endsWith("_ERR")) {
+    return action.err;
   }
 
   return state;
@@ -57,20 +55,22 @@ function todos(state = [], action) {
       return [action.todo, ...state];
     case ActionTypes.COMPLETE_TODO_ENDED:
 
-      var indexOfTodo = _.findIndex(state, (item) => item._id === action.id);
+      let i1 = _.findIndex(state, (item) => item._id === action.id);
 
       return [
-          ...state.slice(0, indexOfTodo),
-          Object.assign({}, state[indexOfTodo], {
-            completed: true
-          }),
-          ...state.slice(indexOfTodo + 1)
-        ];
+        ...state.slice(0, i1),
+        Object.assign({}, state[i1], {
+          completed: true
+        }),
+        ...state.slice(i1 + 1)
+      ];
+    case ActionTypes.REMOVE_TODO_ENDED:
+      let i2 = _.findIndex(state, (item) => item._id === action.id);
+      return [
+        ...state.slice(0, i2),
+        ...state.slice(i2 + 1)
+      ];
     case ActionTypes.FIND_ALL_TODOS_ENDED:
-      var key = 0;
-
-      _.forEach(action.todos, (t) => t.key = ++key);
-
       return action.todos;
     default:
       return state;
@@ -78,6 +78,7 @@ function todos(state = [], action) {
 }
 
 const todoApp = combineReducers({
+  newItemText,
   inProgress,
   completingId,
   err,

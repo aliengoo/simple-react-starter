@@ -2,7 +2,6 @@
 
 import ActionTypes from './todo-action-types';
 import TodoApi from '../todo-api';
-import todoStore from '../store/todo-store';
 
 let todoApi = new TodoApi();
 

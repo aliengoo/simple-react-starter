@@ -2,10 +2,14 @@
 
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import { createStore, applyMiddleware } from 'redux';
+import { compose, createStore, applyMiddleware } from 'redux';
 import todoApp from '../reducers/todo-app';
+// Redux DevTools store enhancers
+import { devTools, persistState } from 'redux-devtools';
+
 
 const initialState = {
+  newItemText: "",
   inProgress: false,
   completingId: "",
   err: "",
@@ -14,13 +18,29 @@ const initialState = {
 
 const loggerMiddleware = createLogger();
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
-)(createStore);
+let finalCreateStore;
 
-export default function createTodoStore() {
-  const todoStore = createStoreWithMiddleware(todoApp, initialState);
+if (document.getElementById('react-container').hasAttribute("debug")) {
+  finalCreateStore = compose(
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware),
+    devTools(),
+    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+  )(createStore);
+} else {
+  finalCreateStore = applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )(createStore);
+}
+
+let todoStore;
+
+export default function instance() {
+  if (!todoStore) {
+    todoStore = finalCreateStore(todoApp, initialState);
+  }
 
   return todoStore;
 };
