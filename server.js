@@ -7,7 +7,7 @@ var express = require("express")
   delay = require('express-delay');
 
 var app = express();
-app.use(delay(2000));
+//app.use(delay(2000));
 app.use(bodyParser.json());
 app.use(cors());
 
