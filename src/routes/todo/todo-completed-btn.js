@@ -9,14 +9,16 @@ export default class TodoCompletedBtn extends Component {
     var content = todo.complete ? "Completed" : "Complete";
 
     if (inProgress && completingId === todo._id) {
-        content = "Completing..."
+      content = "Completing...";
     }
 
-    return (<button
-      disabled={todo.completed || inProgress}
-      onClick={() => completeTodoClick(todo._id)}
-      type="button"
-      className="btn btn-primary btn-sm">{content}</button>);
+    return (
+      <button
+        disabled={todo.completed || inProgress}
+        onClick={() => completeTodoClick(todo._id)}
+        type="button"
+        className="btn btn-primary btn-sm">{content}</button>
+    );
   }
 }
 

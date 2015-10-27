@@ -7,11 +7,13 @@ export default class TodoRemoveBtn extends Component {
   render() {
     const {inProgress, removeTodoClick, todoId} = this.props;
 
-    return (<button
-      disabled={inProgress}
-      onClick={() => removeTodoClick(todoId)}
-      type="button"
-      className="btn btn-danger btn-sm">Remove</button>);
+    return (
+      <button
+        disabled={inProgress}
+        onClick={() => removeTodoClick(todoId)}
+        type="button"
+        className="btn btn-danger btn-sm">Remove</button>
+    );
   }
 
 }

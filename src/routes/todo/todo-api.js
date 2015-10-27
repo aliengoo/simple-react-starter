@@ -1,3 +1,5 @@
+"use strict";
+
 import request from 'superagent';
 import Q from 'q';
 
@@ -14,7 +16,7 @@ export default class TodoApi {
           defer.resolve(res.body);
         }
       };
-    }
+    };
   }
 
   findAll() {
