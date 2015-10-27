@@ -11,7 +11,7 @@ module.exports = {
       {
         test: /\.js?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'jshint-loader'
+        loader: 'eslint-loader'
       }
     ],
 
@@ -23,9 +23,8 @@ module.exports = {
       }
     ]
   },
-
-  jshint: {
-    esnext: true
+  devServer: {
+    contentBase: "./wwwroot"
   },
   resolve: {
     extensions: ['', '.js']

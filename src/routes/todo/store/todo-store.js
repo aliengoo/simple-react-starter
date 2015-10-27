@@ -30,8 +30,8 @@ if (document.getElementById('react-container').hasAttribute("debug")) {
   )(createStore);
 } else {
   finalCreateStore = applyMiddleware(
-    thunkMiddleware, // lets us dispatch() functions
-    loggerMiddleware // neat middleware that logs actions
+    thunkMiddleware,
+    loggerMiddleware
   )(createStore);
 }
 

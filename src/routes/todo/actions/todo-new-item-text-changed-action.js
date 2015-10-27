@@ -6,5 +6,5 @@ export function newItemTextChanged(newItemText) {
   return {
     type: ActionTypes.NEW_ITEM_TEXT_CHANGED,
     text: newItemText
-  }
+  };
 }

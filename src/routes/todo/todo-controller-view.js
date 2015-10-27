@@ -41,7 +41,7 @@ class TodoControllerView extends React.Component {
     return (
       <div className="container" id="todo">
         <PageHeader>
-          Todo list
+          Todo listsdwefwef
         </PageHeader>
 
         <div className="row">
