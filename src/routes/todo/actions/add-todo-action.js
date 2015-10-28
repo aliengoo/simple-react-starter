@@ -1,21 +1,22 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-import ActionTypes from './todo-action-types';
 import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();
 
+const ADD_TODO = "ADD_TODO";
+
 function addTodoStart() {
   return {
-    type: ActionTypes.ADD_TODO,
+    type: ADD_TODO,
     _asyncStatus: AsyncStatus.FETCHING
   };
 }
 
 function addTodoEnd(todo) {
   return {
-    type: ActionTypes.ADD_TODO,
+    type: ADD_TODO,
     todo,
     _asyncStatus: AsyncStatus.COMPLETE
   };
@@ -23,13 +24,13 @@ function addTodoEnd(todo) {
 
 function addTodoErr(err) {
   return {
-    type: ActionTypes.ADD_TODO,
+    type: ADD_TODO,
     err: err.message,
     _asyncStatus: AsyncStatus.FAILED
   };
 }
 
-export function addTodo(text) {
+function addTodo(text) {
   return dispatch => {
     dispatch(addTodoStart());
     return todoApi.save({
@@ -37,4 +38,9 @@ export function addTodo(text) {
       })
       .then(todo => dispatch(addTodoEnd(todo)), (err) => addTodoErr(err));
   };
+}
+
+export default {
+  create: addTodo,
+  type: ADD_TODO
 }

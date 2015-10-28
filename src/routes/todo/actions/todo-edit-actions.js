@@ -7,9 +7,11 @@ import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();
 
+const SAVE_TODO_EDIT = "SAVE_TODO_EDIT";
+
 function saveTodoEditFetching(id) {
   return {
-    type: ActionTypes.SAVE_TODO_EDIT,
+    type: SAVE_TODO_EDIT,
     _asyncStatus: AsyncStatus.FETCHING,
     id
   };
@@ -17,7 +19,7 @@ function saveTodoEditFetching(id) {
 
 function saveTodoEditComplete(todo) {
   return {
-    type: ActionTypes.SAVE_TODO_EDIT,
+    type: SAVE_TODO_EDIT,
     _asyncStatus: AsyncStatus.COMPLETE,
     todo
   };
@@ -25,7 +27,7 @@ function saveTodoEditComplete(todo) {
 
 function saveTodoEditFailed(err) {
   return {
-    type: ActionTypes.SAVE_TODO_EDIT,
+    type: SAVE_TODO_EDIT,
     _asyncStatus: AsyncStatus.FAILED,
     err: err.message
   };

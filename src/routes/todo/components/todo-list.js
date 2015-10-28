@@ -32,6 +32,9 @@ export default class TodoList extends Component {
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
+  updateTodoStartedClick: PropTypes.func.isRequired,
+  updateTodoCommitClick: PropTypes.func.isRequired,
+  updateTodoAbortedClick: PropTypes.func.isRequired,
   removeTodoClick: PropTypes.func.isRequired,
   completeTodoClick: PropTypes.func.isRequired,
   uncompleteTodoClick: PropTypes.func.isRequired,

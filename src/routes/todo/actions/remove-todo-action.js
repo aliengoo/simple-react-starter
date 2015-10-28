@@ -6,9 +6,11 @@ import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();
 
+const REMOVE_TODO = "REMOVE_TODO";
+
 function removeTodoStart(id) {
   return {
-    type: ActionTypes.REMOVE_TODO,
+    type: REMOVE_TODO,
     id,
     _asyncStatus: AsyncStatus.FETCHING
   };
@@ -16,7 +18,7 @@ function removeTodoStart(id) {
 
 function removeTodoEnd(id) {
   return {
-    type: ActionTypes.REMOVE_TODO,
+    type: REMOVE_TODO,
     id,
     _asyncStatus: AsyncStatus.COMPLETE
   };
@@ -24,16 +26,21 @@ function removeTodoEnd(id) {
 
 function removeTodoErr(err) {
   return {
-    type: ActionTypes.REMOVE_TODO,
+    type: REMOVE_TODO,
     err: err.message,
     _asyncStatus: AsyncStatus.FAILED
   };
 }
 
-export function removeTodo(id) {
+function removeTodo(id) {
   return dispatch => {
     dispatch(removeTodoStart(id));
     return todoApi.remove(id)
       .then(() => dispatch(removeTodoEnd(id)), (err) => removeTodoErr(err));
   };
 }
+
+export default {
+  create: removeTodo,
+  type: REMOVE_TODO
+};

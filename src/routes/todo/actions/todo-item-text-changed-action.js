@@ -1,10 +1,15 @@
 "use strict";
 
-import ActionTypes from './todo-action-types';
+const TODO_ITEM_TEXT_CHANGED = "TODO_ITEM_TEXT_CHANGED";
 
-export function todoItemTextChanged(text) {
+function todoItemTextChanged(text) {
   return {
-    type: ActionTypes.TODO_ITEM_TEXT_CHANGED,
+    type: TODO_ITEM_TEXT_CHANGED,
     text
   };
 }
+
+export default {
+  create: todoItemTextChanged,
+  type: TODO_ITEM_TEXT_CHANGED
+};

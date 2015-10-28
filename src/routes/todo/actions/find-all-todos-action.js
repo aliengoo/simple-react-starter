@@ -7,16 +7,18 @@ import todoStore from '../store/todo-store';
 
 let todoApi = new TodoApi();
 
+const FIND_ALL_TODOS = "FIND_ALL_TODOS";
+
 function findAllTodosFetching() {
   return {
-    type: ActionTypes.FIND_ALL_TODOS,
+    type: FIND_ALL_TODOS,
     _asyncStatus: AsyncStatus.FETCHING
   };
 }
 
 function findAllTodosComplete(todos) {
   return {
-    type: ActionTypes.FIND_ALL_TODOS,
+    type: FIND_ALL_TODOS,
     todos,
     _asyncStatus: AsyncStatus.COMPLETE
   };
@@ -24,16 +26,21 @@ function findAllTodosComplete(todos) {
 
 function findAllTodosFailed(err) {
   return {
-    type: ActionTypes.FIND_ALL_TODOS,
+    type: FIND_ALL_TODOS,
     err: err.message,
     _asyncStatus: AsyncStatus.FAILED
   };
 }
 
-export function findAllTodos() {
+function findAllTodos() {
   return dispatch => {
     dispatch(findAllTodosFetching());
     return todoApi.findAll()
       .then(todos => dispatch(findAllTodosComplete(todos)), (err) => findAllTodosFailed(err));
   };
 }
+
+export default {
+  findAllTodos: findAllTodos,
+  type: FIND_ALL_TODOS
+};

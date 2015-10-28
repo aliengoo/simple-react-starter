@@ -17,12 +17,15 @@ import Col from '../../../shared/layout/col';
 import Row from '../../../shared/layout/row';
 
 // actions
-import {findAllTodos} from '../actions/todo-find-all-actions';
-import {addTodo} from '../actions/todo-add-todo-actions';
-import {completeTodo} from '../actions/todo-complete-todo-actions';
-import {removeTodo} from '../actions/todo-remove-todo-actions';
-import {todoItemTextChanged} from '../actions/todo-item-text-changed-action';
-import {uncompleteTodo} from '../actions/todo-uncomplete-todo-action';
+import FindAllTodosAction from '../actions/find-all-todos-action';
+import AddTodoAction from '../actions/add-todo-action';
+import CompleteTodoAction from '../actions/complete-todo-action';
+import RemoveTodoAction from '../actions/remove-todo-action';
+import TodoItemTextChangedAction from '../actions/todo-item-text-changed-action';
+import UncompleteTodoAction from '../actions/uncomplete-todo-action';
+import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
+import UpdateTodoStartedAction from '../actions/update-todo-started-action';
+import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
 
 class TodoContainer extends React.Component {
 
@@ -32,7 +35,7 @@ class TodoContainer extends React.Component {
 
   componentDidMount() {
     // when the container, or "smart" component loads, find all the todos
-    this.props.dispatch(findAllTodos());
+    this.props.dispatch(FindAllTodosAction.findAllTodos());
   }
 
   render() {
@@ -58,8 +61,8 @@ class TodoContainer extends React.Component {
         <Row>
           <Col media="sm" grid="12">
             <TodoInput
-              onChange={(e) => dispatch(todoItemTextChanged(e.target.value))}
-              addTodoClick={() => dispatch(addTodo(todoItemText))}
+              onChange={(e) => dispatch(TodoItemTextChangedAction.create(e.target.value))}
+              addTodoClick={() => dispatch(AddTodoAction.create(todoItemText))}
               inProgress={inProgress}
               todoItemText={todoItemText}/>
           </Col>
@@ -71,9 +74,9 @@ class TodoContainer extends React.Component {
               todos={todos}
               inProgress={inProgress}
               activeTodoId={activeTodoId}
-              uncompleteTodoClick={(id) => dispatch(uncompleteTodo(id))}
-              removeTodoClick={(id) => dispatch(removeTodo(id))}
-              completeTodoClick={(id) => dispatch(completeTodo(id))}/>
+              uncompleteTodoClick={(id) => dispatch(UncompleteTodoAction.create(id))}
+              removeTodoClick={(id) => dispatch(RemoveTodoAction.create(id))}
+              completeTodoClick={(id) => dispatch(CompleteTodoAction.create(id))}/>
           </Col>
         </Row>
         {alertError}

@@ -6,9 +6,11 @@ import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();
 
+const COMPLETE_TODO = "COMPLETE_TODO";
+
 function completeTodoFetching(id) {
   return {
-    type: ActionTypes.COMPLETE_TODO,
+    type: COMPLETE_TODO,
     id,
     _asyncStatus: AsyncStatus.FETCHING
   };
@@ -16,7 +18,7 @@ function completeTodoFetching(id) {
 
 function completeTodoCompleted(id) {
   return {
-    type: ActionTypes.COMPLETE_TODO,
+    type: COMPLETE_TODO,
     id,
     _asyncStatus: AsyncStatus.COMPLETE
   };
@@ -24,16 +26,21 @@ function completeTodoCompleted(id) {
 
 function completeTodoFailed(err) {
   return {
-    type: ActionTypes.COMPLETE_TODO,
+    type: COMPLETE_TODO,
     err: err.message,
     _asyncStatus: AsyncStatus.FAILED
   };
 }
 
-export function completeTodo(id) {
+function completeTodo(id) {
   return dispatch => {
     dispatch(completeTodoFetching(id));
     return todoApi.complete(id)
       .then(todo => dispatch(completeTodoCompleted(id)), (err) => completeTodoFailed(err));
   };
 }
+
+export default {
+  create: completeTodo,
+  type: COMPLETE_TODO
+};
