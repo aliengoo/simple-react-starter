@@ -5,8 +5,11 @@ import TodoListItemControls from './todo-list-item-controls';
 
 export default class TodoListItem extends Component {
 
-  render() {
+  _enableEdit() {
 
+  }
+
+  render() {
     const {todo, removeTodoClick, completeTodoClick, uncompleteTodoClick, inProgress, activeTodoId} = this.props;
 
     var task = <span>{todo.text}</span>;
