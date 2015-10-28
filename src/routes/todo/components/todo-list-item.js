@@ -5,12 +5,8 @@ import TodoListItemControls from './todo-list-item-controls';
 
 export default class TodoListItem extends Component {
 
-  _enableEdit() {
-
-  }
-
   render() {
-    const {todo, removeTodoClick, completeTodoClick, uncompleteTodoClick, inProgress, activeTodoId} = this.props;
+    const {todo, removeTodoClick, todoBeingEdited, todoBeingEditedPriorState, completeTodoClick, uncompleteTodoClick, inProgress, activeTodoId} = this.props;
 
     var task = <span>{todo.text}</span>;
 
@@ -18,25 +14,36 @@ export default class TodoListItem extends Component {
       task = <span className="task-completed">{task}</span>;
     }
 
+    var controls = (<TodoListItemControls
+      completeTodoClick={completeTodoClick}
+      uncompleteTodoClick={uncompleteTodoClick}
+      removeTodoClick={removeTodoClick}
+      todo={todo}
+      inProgress={inProgress}
+      activeTodoId={activeTodoId}
+    />);
+
+    if (todoBeingEditedPriorState !== null) {
+      controls = (<div></div>);
+    }
+
     return (
       <div className="todo-list-item">
         <div className="todo-list-item-task">
           {task}
         </div>
-        <TodoListItemControls
-          completeTodoClick={completeTodoClick}
-          uncompleteTodoClick={uncompleteTodoClick}
-          removeTodoClick={removeTodoClick}
-          todo={todo}
-          inProgress={inProgress}
-          activeTodoId={activeTodoId}
-        />
+        {controls}
       </div>
     );
   }
 }
 
 TodoListItem.propTypes = {
+  todoBeingEditedPriorState: PropTypes.object,
+  todoBeingEdited: PropTypes.object,
+  updateTodoStartedClick: PropTypes.func.isRequired,
+  updateTodoCommitClick: PropTypes.func.isRequired,
+  updateTodoAbortedClick: PropTypes.func.isRequired,
   todo: PropTypes.object.isRequired,
   activeTodoId: PropTypes.string,
   inProgress: PropTypes.bool,

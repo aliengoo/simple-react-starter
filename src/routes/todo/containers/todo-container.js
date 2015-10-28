@@ -39,7 +39,7 @@ class TodoContainer extends React.Component {
   }
 
   render() {
-    const {dispatch, todos, inProgress, activeTodoId, err, todoItemText} = this.props;
+    const {dispatch, todoBeingEdited, todoBeingEditedPriorState, todos, inProgress, activeTodoId, err, todoItemText} = this.props;
 
     var alertError = <div></div>;
 
@@ -74,6 +74,11 @@ class TodoContainer extends React.Component {
               todos={todos}
               inProgress={inProgress}
               activeTodoId={activeTodoId}
+              todoBeingEdit={todoBeingEdited}
+              todoBeingEditedPriorState={todoBeingEditedPriorState}
+              updateTodoAbortedClick={(id) => dispatch(UpdateTodoAbortedAction.create(id))}
+              updateTodoCommitClick={(todo) => dispatch(UpdateTodoCommitAction.create(todo))}
+              updateTodoStartedClick={(todo) => dispatch(UpdateTodoStartedAction.create(todo))}
               uncompleteTodoClick={(id) => dispatch(UncompleteTodoAction.create(id))}
               removeTodoClick={(id) => dispatch(RemoveTodoAction.create(id))}
               completeTodoClick={(id) => dispatch(CompleteTodoAction.create(id))}/>
@@ -91,6 +96,8 @@ function select(state) {
 
   return {
     todoItemText: state.todoItemText,
+    todoBeingEdited: state.todoBeingEdited,
+    todoBeingEditedPriorState: state.todoBeingEditedPriorState,
     todos: state.todos,
     inProgress: state.inProgress,
     activeTodoId: state.activeTodoId,

@@ -7,7 +7,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 export default class TodoList extends Component {
 
   render() {
-    const {todos, removeTodoClick, uncompleteTodoClick, completeTodoClick, inProgress, activeTodoId} = this.props;
+    const {todos, todoBeingEditedPriorState, todoBeingEdited, removeTodoClick, uncompleteTodoClick, completeTodoClick, inProgress, activeTodoId} = this.props;
 
     var items = todos.map((todo, key) =>
       (<TodoListItem
@@ -32,6 +32,8 @@ export default class TodoList extends Component {
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
+  todoBeingEditedPriorState: PropTypes.object,
+  todoBeingEdited: PropTypes.object,
   updateTodoStartedClick: PropTypes.func.isRequired,
   updateTodoCommitClick: PropTypes.func.isRequired,
   updateTodoAbortedClick: PropTypes.func.isRequired,

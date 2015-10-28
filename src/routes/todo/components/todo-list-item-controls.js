@@ -40,6 +40,11 @@ export default class TodoListItemControls extends Component {
 
 TodoListItemControls.propTypes = {
   todo: PropTypes.object.isRequired,
+  todoBeingEditedPriorState: PropTypes.object,
+  todoBeingEdited: PropTypes.object,
+  updateTodoStartedClick: PropTypes.func.isRequired,
+  updateTodoCommitClick: PropTypes.func.isRequired,
+  updateTodoAbortedClick: PropTypes.func.isRequired,
   inProgress: PropTypes.bool,
   activeTodoId: PropTypes.string,
   completeTodoClick: PropTypes.func.isRequired,
