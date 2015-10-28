@@ -1,14 +1,13 @@
 "use strict";
 
 import React, {Component, PropTypes} from 'react';
-import TodoCompletedBtn from './todo-completed-btn';
-import TodoRemoveBtn from './todo-remove-btn';
+import TodoListItemControls from './todo-list-item-controls';
 
 export default class TodoListItem extends Component {
 
   render() {
 
-    const {todo, removeTodoClick, completeTodoClick, inProgress, completingId} = this.props;
+    const {todo, removeTodoClick, completeTodoClick, uncompleteTodoClick, inProgress, activeTodoId} = this.props;
 
     var task = <span>{todo.text}</span>;
 
@@ -17,32 +16,28 @@ export default class TodoListItem extends Component {
     }
 
     return (
-      <li className="todo-list-item">
-        <span className="todo-list-item-task">
+      <div className="todo-list-item">
+        <div className="todo-list-item-task">
           {task}
-        </span>
-        <span className="todo-list-item-controls">
-          <TodoCompletedBtn
-            completeTodoClick={completeTodoClick}
-            todo={todo}
-            inProgress={inProgress}
-            completingId={completingId}/>
-
-          <TodoRemoveBtn
-            removeTodoClick={removeTodoClick}
-            todoId={todo._id}
-            inProgress={inProgress}/>
-        </span>
-        <div className="clearfix"></div>
-      </li>
+        </div>
+        <TodoListItemControls
+          completeTodoClick={completeTodoClick}
+          uncompleteTodoClick={uncompleteTodoClick}
+          removeTodoClick={removeTodoClick}
+          todo={todo}
+          inProgress={inProgress}
+          activeTodoId={activeTodoId}
+        />
+      </div>
     );
   }
 }
 
 TodoListItem.propTypes = {
   todo: PropTypes.object.isRequired,
-  completingId: PropTypes.string,
+  activeTodoId: PropTypes.string,
   inProgress: PropTypes.bool,
   removeTodoClick: PropTypes.func.isRequired,
-  completeTodoClick: PropTypes.func.isRequired
+  completeTodoClick: PropTypes.func.isRequired,
+  uncompleteTodoClick: PropTypes.func.isRequired
 };

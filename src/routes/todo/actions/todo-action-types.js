@@ -8,7 +8,8 @@ export default keyMirror({
   FIND_ALL_TODOS: null,
   ADD_TODO: null,
   REMOVE_TODO: null,
-  COMPLETE_TODO: null
+  COMPLETE_TODO: null,
+  UNCOMPLETE_TODO: null
 });
 
 

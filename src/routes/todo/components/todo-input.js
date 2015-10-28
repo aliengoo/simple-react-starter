@@ -7,24 +7,51 @@ import instance from '../store/todo-store';
 
 export default class TodoInput extends React.Component {
 
+  componentWillUnmount() {
+    let store = instance();
+
+    store.unsubscribe(this._stateChanged.bind(this));
+  }
+
   componentDidMount() {
-    var store = instance();
+    let store = instance();
 
-    store.subscribe(() => {
-      var state = store.getState();
+    store.subscribe(this._stateChanged.bind(this));
+  }
 
-      if (state.todoItemText !== this.refs.todoInput.value) {
-        this.refs.todoInput.value = state.todoItemText;
-      }
-    });
+  componentDidUpdate() {
+    this.refs.todoInput.focus();
+  }
+
+  _stateChanged() {
+    let store = instance();
+
+    var state = store.getState();
+
+    if (state.todoItemText !== this.refs.todoInput.value) {
+      this.refs.todoInput.value = state.todoItemText;
+    }
+  }
+
+  /**
+   * Handle the user hitting enter - this fires an addTodoClick if there is anything in the todoInput.
+   * @param e - the keyDown event
+   * @private - internal function
+   */
+  _onKeyDown(e) {
+    if (e.keyCode === 13 && (this.refs.todoInput.value || "").length > 0) {
+      this.props.addTodoClick();
+    }
   }
 
   render() {
     const {onChange, inProgress, addTodoClick} = this.props;
 
     var input = (<input
+      name="todo-input"
       disabled={inProgress}
       type="text"
+      onKeyDown={this._onKeyDown.bind(this)}
       onChange={onChange}
       className="form-control input-lg"
       placeholder="Enter your todo here..."

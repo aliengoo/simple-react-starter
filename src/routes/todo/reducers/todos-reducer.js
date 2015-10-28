@@ -29,6 +29,23 @@ function completeTodoReducer(todos, action) {
   return todos;
 }
 
+function uncompleteTodoReducer(todos, action) {
+  if (action._asyncStatus === ActionStatus.COMPLETE) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
+
+    return [
+      ...todos.slice(0, indexOfTodo),
+      Object.assign({}, todos[indexOfTodo], {
+        completed: false
+      }),
+      ...todos.slice(indexOfTodo + 1)
+    ];
+  }
+
+  return todos;
+}
+
+
 function removeTodoReducer(todos, action) {
 
   if (action._asyncStatus === ActionStatus.COMPLETE) {
@@ -64,6 +81,8 @@ export default function todos(todos = [], action) {
       return addTodoReducer(todos, action);
     case ActionTypes.COMPLETE_TODO:
       return completeTodoReducer(todos, action);
+    case ActionTypes.UNCOMPLETE_TODO:
+      return uncompleteTodoReducer(todos, action);
     case ActionTypes.REMOVE_TODO:
       return removeTodoReducer(todos, action);
     case ActionTypes.FIND_ALL_TODOS:

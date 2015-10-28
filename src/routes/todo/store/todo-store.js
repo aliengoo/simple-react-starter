@@ -11,7 +11,7 @@ import { devTools, persistState } from 'redux-devtools';
 const initialState = {
   todoItemText: "",
   inProgress: false,
-  completingId: "",
+  activeTodoId: "",
   err: "",
   todos: []
 };

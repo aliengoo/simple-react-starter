@@ -5,14 +5,22 @@ import React, {Component, PropTypes} from 'react';
 export default class TodoRemoveBtn extends Component {
 
   render() {
-    const {inProgress, removeTodoClick, todoId} = this.props;
+    const {inProgress, removeTodoClick, activeTodoId, todo} = this.props;
+
+    let icon = <i className="fa fa-close"/>;
+
+    var todoInProgress = inProgress && activeTodoId === todo._id;
+
+    if (todoInProgress) {
+      icon = <i className="fa fa-spinner fa-spin"/>;
+    }
 
     return (
       <button
-        disabled={inProgress}
-        onClick={() => removeTodoClick(todoId)}
+        disabled={todoInProgress}
+        onClick={() => removeTodoClick(todo._id)}
         type="button"
-        className="btn btn-danger btn-sm">Remove</button>
+        className="btn btn-danger">{icon}</button>
     );
   }
 
@@ -21,5 +29,6 @@ export default class TodoRemoveBtn extends Component {
 TodoRemoveBtn.propTypes = {
   inProgress: PropTypes.bool,
   removeTodoClick: PropTypes.func.isRequired,
-  todoId: PropTypes.string.isRequired
+  todo: PropTypes.object.isRequired,
+  activeTodoId: PropTypes.string.isRequired
 };

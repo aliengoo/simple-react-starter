@@ -1,0 +1,66 @@
+/* inject:imports */
+body {
+  font-family: 'Fira Mono', sans-serif; }
+
+.todo-list-item {
+  list-style: none;
+  font-size: 20px;
+  line-height: 1.8em;
+  border: 1px whitesmoke solid;
+  border-radius: 7px;
+  padding: 10px 8px;
+  margin-top: 10px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row; }
+
+.todo-list-item-task {
+  -webkit-flex: 7;
+  -ms-flex: 7;
+  flex: 7; }
+  .todo-list-item-task .task-completed {
+    text-decoration: line-through;
+    opacity: 0.5; }
+
+.todo-list-item-controls {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
+  .todo-list-item-controls div {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row; }
+    .todo-list-item-controls div button {
+      margin-left: 10px; }
+
+.todo-list-item-enter {
+  opacity: 0.01; }
+
+.todo-list-item-enter.todo-list-item-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.todo-list-item-leave {
+  opacity: 1; }
+
+.todo-list-item-leave.todo-list-item-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+.todo-list {
+  margin-top: 10px;
+  padding: 0; }
+
+/* endinject */

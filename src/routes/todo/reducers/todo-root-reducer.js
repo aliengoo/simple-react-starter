@@ -5,7 +5,7 @@ import _ from 'lodash';
 import todos from './todos-reducer';
 import todoItemText from './todo-item-text-reducer';
 import inProgress from './in-progress-reducer';
-import completingId from './completing-id-reducer';
+import activeTodoId from './active-todo-id-reducer';
 import err from './err-reducer';
 
 import { combineReducers } from 'redux';
@@ -13,7 +13,7 @@ import { combineReducers } from 'redux';
 const rootReducer = combineReducers({
   todoItemText,
   inProgress,
-  completingId,
+  activeTodoId,
   err,
   todos
 });

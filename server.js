@@ -7,7 +7,7 @@ var express = require("express")
   delay = require('express-delay');
 
 var app = express();
-//app.use(delay(2000));
+//app.use(delay(1000));
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -56,6 +56,30 @@ app.put('/api/todo/complete/:id', function (req, res) {
     }
   })
 });
+
+app.put('/api/todo/uncomplete/:id', function (req, res) {
+
+  Todo.findById(req.params.id, function(err, todo) {
+    if (err) {
+      res.status(500).send({
+        err: err
+      });
+    } else {
+      todo.completed = false;
+
+      todo.save(function (err) {
+        if (err) {
+          res.status(500).send({
+            err: err
+          });
+        } else {
+          res.json(todo);
+        }
+      });
+    }
+  })
+});
+
 
 app.post('/api/todo', function (req, res) {
   var todo = new Todo(req.body);

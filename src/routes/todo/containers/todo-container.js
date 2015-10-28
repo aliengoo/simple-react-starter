@@ -11,6 +11,10 @@ import PageHeader from '../../../shared/page-header';
 // todo components
 import TodoInput from '../components/todo-input';
 import TodoList from '../components/todo-list';
+import ContainerFluid from '../../../shared/layout/container-fluid';
+import Container from '../../../shared/layout/container';
+import Col from '../../../shared/layout/col';
+import Row from '../../../shared/layout/row';
 
 // actions
 import {findAllTodos} from '../actions/todo-find-all-actions';
@@ -18,8 +22,9 @@ import {addTodo} from '../actions/todo-add-todo-actions';
 import {completeTodo} from '../actions/todo-complete-todo-actions';
 import {removeTodo} from '../actions/todo-remove-todo-actions';
 import {todoItemTextChanged} from '../actions/todo-item-text-changed-action';
+import {uncompleteTodo} from '../actions/todo-uncomplete-todo-action';
 
-class TodoControllerView extends React.Component {
+class TodoContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -31,7 +36,7 @@ class TodoControllerView extends React.Component {
   }
 
   render() {
-    const {dispatch, todos, inProgress, completingId, err, todoItemText} = this.props;
+    const {dispatch, todos, inProgress, activeTodoId, err, todoItemText} = this.props;
 
     var alertError = <div></div>;
 
@@ -45,34 +50,34 @@ class TodoControllerView extends React.Component {
     }
 
     return (
-      <div className="container" id="todo">
+      <Container>
         <PageHeader>
           Todo List
         </PageHeader>
 
-        <div className="row">
-          <div className="col-sm-12">
+        <Row>
+          <Col media="sm" grid="12">
             <TodoInput
               onChange={(e) => dispatch(todoItemTextChanged(e.target.value))}
               addTodoClick={() => dispatch(addTodo(todoItemText))}
               inProgress={inProgress}
               todoItemText={todoItemText}/>
-            <hr/>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row">
-          <div className="col-sm-12">
+        <Row>
+          <Col media="sm" grid="12">
             <TodoList
               todos={todos}
               inProgress={inProgress}
-              completingId={completingId}
+              activeTodoId={activeTodoId}
+              uncompleteTodoClick={(id) => dispatch(uncompleteTodo(id))}
               removeTodoClick={(id) => dispatch(removeTodo(id))}
               completeTodoClick={(id) => dispatch(completeTodo(id))}/>
-          </div>
-        </div>
+          </Col>
+        </Row>
         {alertError}
-      </div>
+      </Container>
     );
   }
 }
@@ -85,9 +90,9 @@ function select(state) {
     todoItemText: state.todoItemText,
     todos: state.todos,
     inProgress: state.inProgress,
-    completingId: state.completingId,
+    activeTodoId: state.activeTodoId,
     err: state.err
   };
 }
 
-export default connect(select)(TodoControllerView);
+export default connect(select)(TodoContainer);

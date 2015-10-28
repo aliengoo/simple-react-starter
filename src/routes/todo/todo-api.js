@@ -63,6 +63,18 @@ export default class TodoApi {
     return defer.promise;
   }
 
+  uncomplete(id) {
+    var defer = Q.defer();
+
+    request
+      .put(`${URI}todo/uncomplete/${id}`)
+      .accept('json')
+      .end(this._responseHandler(defer));
+
+    return defer.promise;
+  }
+
+
   save(todo) {
 
     var defer = Q.defer();

@@ -14,7 +14,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import instance from './routes/todo/store/todo-store';
 
 import App from './routes/app/app.js';
-import TodoControllerView from './routes/todo/containers/todo-controller-view';
+import TodoContainer from './routes/todo/containers/todo-container';
 
 const store = instance();
 
@@ -23,7 +23,7 @@ var reactContainer = document.getElementById('react-container');
 var providerRoot = <Provider store={store}>
   <Router>
     <Route path="/" component={App}>
-      <Route path="/todo" component={TodoControllerView}/>
+      <Route path="/todo" component={TodoContainer}/>
     </Route>
   </Router>
 </Provider>;

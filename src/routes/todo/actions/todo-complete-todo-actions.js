@@ -6,7 +6,7 @@ import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();
 
-function completeTodoStart(id) {
+function completeTodoFetching(id) {
   return {
     type: ActionTypes.COMPLETE_TODO,
     id,
@@ -14,7 +14,7 @@ function completeTodoStart(id) {
   };
 }
 
-function completeTodoEnd(id) {
+function completeTodoCompleted(id) {
   return {
     type: ActionTypes.COMPLETE_TODO,
     id,
@@ -22,7 +22,7 @@ function completeTodoEnd(id) {
   };
 }
 
-function completeTodoErr(err) {
+function completeTodoFailed(err) {
   return {
     type: ActionTypes.COMPLETE_TODO,
     err: err.message,
@@ -32,8 +32,8 @@ function completeTodoErr(err) {
 
 export function completeTodo(id) {
   return dispatch => {
-    dispatch(completeTodoStart(id));
+    dispatch(completeTodoFetching(id));
     return todoApi.complete(id)
-      .then(todo => dispatch(completeTodoEnd(id)), (err) => completeTodoErr(err));
+      .then(todo => dispatch(completeTodoCompleted(id)), (err) => completeTodoFailed(err));
   };
 }

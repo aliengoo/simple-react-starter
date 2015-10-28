@@ -4,4 +4,6 @@ idea
 bower_components
 wwwroot/app.js
 wwwroot/app.css
+wwwroot/vendor.css
+wwwroot/fonts/**
 
