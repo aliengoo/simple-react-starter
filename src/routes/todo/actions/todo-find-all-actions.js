@@ -1,36 +1,39 @@
 "use strict";
 
+import AsyncStatus from '../../../shared/async-status';
 import ActionTypes from './todo-action-types';
 import TodoApi from '../todo-api';
 import todoStore from '../store/todo-store';
 
 let todoApi = new TodoApi();
 
-function findAllTodosStart() {
+function findAllTodosFetching() {
   return {
-    type: ActionTypes.FIND_ALL_TODOS_STARTED
+    type: ActionTypes.FIND_ALL_TODOS,
+    _asyncStatus: AsyncStatus.FETCHING
   };
 }
 
-function findAllTodosEnd(todos) {
+function findAllTodosComplete(todos) {
   return {
-    type: ActionTypes.FIND_ALL_TODOS_ENDED,
-    todos
+    type: ActionTypes.FIND_ALL_TODOS,
+    todos,
+    _asyncStatus: AsyncStatus.COMPLETE
   };
 }
 
-function findAllTodosErr(err) {
+function findAllTodosFailed(err) {
   return {
-    type: ActionTypes.FIND_ALL_TODOS_ERR,
-    err: err.message
+    type: ActionTypes.FIND_ALL_TODOS,
+    err: err.message,
+    _asyncStatus: AsyncStatus.FAILED
   };
 }
 
 export function findAllTodos() {
   return dispatch => {
-    dispatch(findAllTodosStart());
+    dispatch(findAllTodosFetching());
     return todoApi.findAll()
-      .then(todos => dispatch(findAllTodosEnd(todos)), (err) => findAllTodosErr(err));
+      .then(todos => dispatch(findAllTodosComplete(todos)), (err) => findAllTodosFailed(err));
   };
 }
-

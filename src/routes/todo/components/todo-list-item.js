@@ -10,7 +10,7 @@ export default class TodoListItem extends Component {
 
     const {todo, removeTodoClick, completeTodoClick, inProgress, completingId} = this.props;
 
-    var task = <span>({todo._id}) - {todo.text}</span>;
+    var task = <span>{todo.text}</span>;
 
     if (todo.completed === true) {
       task = <span className="task-completed">{task}</span>;
@@ -18,10 +18,10 @@ export default class TodoListItem extends Component {
 
     return (
       <li className="todo-list-item">
-        <span>
+        <span className="todo-list-item-task">
           {task}
         </span>
-        <span>
+        <span className="todo-list-item-controls">
           <TodoCompletedBtn
             completeTodoClick={completeTodoClick}
             todo={todo}
@@ -33,6 +33,7 @@ export default class TodoListItem extends Component {
             todoId={todo._id}
             inProgress={inProgress}/>
         </span>
+        <div className="clearfix"></div>
       </li>
     );
   }

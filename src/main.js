@@ -14,7 +14,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import instance from './routes/todo/store/todo-store';
 
 import App from './routes/app/app.js';
-import TodoControllerView from './routes/todo/todo-controller-view';
+import TodoControllerView from './routes/todo/containers/todo-controller-view';
 
 const store = instance();
 

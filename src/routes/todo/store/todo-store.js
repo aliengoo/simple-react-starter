@@ -3,13 +3,13 @@
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { compose, createStore, applyMiddleware } from 'redux';
-import todoApp from '../reducers/todo-app';
+import rootReducer from '../reducers/todo-root-reducer';
 // Redux DevTools store enhancers
 import { devTools, persistState } from 'redux-devtools';
 
 
 const initialState = {
-  newItemText: "",
+  todoItemText: "",
   inProgress: false,
   completingId: "",
   err: "",
@@ -21,6 +21,8 @@ const loggerMiddleware = createLogger();
 let finalCreateStore;
 
 if (document.getElementById('react-container').hasAttribute("debug")) {
+
+  // include debug information in page
   finalCreateStore = compose(
     applyMiddleware(
       thunkMiddleware,
@@ -29,6 +31,8 @@ if (document.getElementById('react-container').hasAttribute("debug")) {
     persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
   )(createStore);
 } else {
+
+
   finalCreateStore = applyMiddleware(
     thunkMiddleware,
     loggerMiddleware
@@ -39,7 +43,7 @@ let todoStore;
 
 export default function instance() {
   if (!todoStore) {
-    todoStore = finalCreateStore(todoApp, initialState);
+    todoStore = finalCreateStore(rootReducer, initialState);
   }
 
   return todoStore;

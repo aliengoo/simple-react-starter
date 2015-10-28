@@ -1,9 +1,9 @@
 "use strict";
 
 import React, {Component, PropTypes} from 'react';
-import InputGroup from '../../shared/input/input-group';
-import InputGroupBtn from '../../shared/input/input-group-btn';
-import instance from './store/todo-store';
+import InputGroup from '../../../shared/input/input-group';
+import InputGroupBtn from '../../../shared/input/input-group-btn';
+import instance from '../store/todo-store';
 
 export default class TodoInput extends React.Component {
 
@@ -13,8 +13,8 @@ export default class TodoInput extends React.Component {
     store.subscribe(() => {
       var state = store.getState();
 
-      if (state.newItemText !== this.refs.todoInput.value) {
-        this.refs.todoInput.value = state.newItemText;
+      if (state.todoItemText !== this.refs.todoInput.value) {
+        this.refs.todoInput.value = state.todoItemText;
       }
     });
   }
@@ -50,7 +50,7 @@ export default class TodoInput extends React.Component {
 
 TodoInput.propTypes = {
   onChange: PropTypes.func.isRequired,
-  newItemText: PropTypes.string,
+  todoItemText: PropTypes.string,
   inProgress: PropTypes.bool,
   addTodoClick: PropTypes.func.isRequired
 };

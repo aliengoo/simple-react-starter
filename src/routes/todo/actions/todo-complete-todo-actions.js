@@ -1,5 +1,6 @@
 "use strict";
 
+import AsyncStatus from '../../../shared/async-status';
 import ActionTypes from './todo-action-types';
 import TodoApi from '../todo-api';
 
@@ -7,22 +8,25 @@ let todoApi = new TodoApi();
 
 function completeTodoStart(id) {
   return {
-    type: ActionTypes.COMPLETE_TODO_STARTED,
-    id
+    type: ActionTypes.COMPLETE_TODO,
+    id,
+    _asyncStatus: AsyncStatus.FETCHING
   };
 }
 
 function completeTodoEnd(id) {
   return {
-    type: ActionTypes.COMPLETE_TODO_ENDED,
-    id
+    type: ActionTypes.COMPLETE_TODO,
+    id,
+    _asyncStatus: AsyncStatus.COMPLETE
   };
 }
 
 function completeTodoErr(err) {
   return {
-    type: ActionTypes.COMPLETE_TODO_ERR,
-    err: err.message
+    type: ActionTypes.COMPLETE_TODO,
+    err: err.message,
+    _asyncStatus: AsyncStatus.FAILED
   };
 }
 

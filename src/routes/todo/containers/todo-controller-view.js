@@ -1,18 +1,23 @@
 "use strict";
 
 import React from 'react';
-import NavBar from '../../shared/nav-bar';
-import PageHeader from '../../shared/page-header';
-import TodoInput from './todo-input';
-import TodoList from './todo-list';
-import Alert from '../../shared/alert';
 import {connect} from 'react-redux';
 
-import {findAllTodos} from './actions/todo-find-all-actions';
-import {addTodo} from './actions/todo-add-todo-actions';
-import {completeTodo} from './actions/todo-complete-todo-actions';
-import {removeTodo} from './actions/todo-remove-todo-actions';
-import {newItemTextChanged} from './actions/todo-new-item-text-changed-action';
+// shared components
+import NavBar from '../../../shared/nav-bar';
+import Alert from '../../../shared/alert';
+import PageHeader from '../../../shared/page-header';
+
+// todo components
+import TodoInput from '../components/todo-input';
+import TodoList from '../components/todo-list';
+
+// actions
+import {findAllTodos} from '../actions/todo-find-all-actions';
+import {addTodo} from '../actions/todo-add-todo-actions';
+import {completeTodo} from '../actions/todo-complete-todo-actions';
+import {removeTodo} from '../actions/todo-remove-todo-actions';
+import {todoItemTextChanged} from '../actions/todo-item-text-changed-action';
 
 class TodoControllerView extends React.Component {
 
@@ -21,11 +26,12 @@ class TodoControllerView extends React.Component {
   }
 
   componentDidMount() {
+    // when the container, or "smart" component loads, find all the todos
     this.props.dispatch(findAllTodos());
   }
 
   render() {
-    const {dispatch, todos, inProgress, completingId, err, newItemText} = this.props;
+    const {dispatch, todos, inProgress, completingId, err, todoItemText} = this.props;
 
     var alertError = <div></div>;
 
@@ -41,16 +47,16 @@ class TodoControllerView extends React.Component {
     return (
       <div className="container" id="todo">
         <PageHeader>
-          Todo listsdwefwef
+          Todo List
         </PageHeader>
 
         <div className="row">
           <div className="col-sm-12">
             <TodoInput
-              onChange={(e) => dispatch(newItemTextChanged(e.target.value))}
-              addTodoClick={() => dispatch(addTodo(newItemText))}
+              onChange={(e) => dispatch(todoItemTextChanged(e.target.value))}
+              addTodoClick={() => dispatch(addTodo(todoItemText))}
               inProgress={inProgress}
-              newItemText={newItemText}/>
+              todoItemText={todoItemText}/>
             <hr/>
           </div>
         </div>
@@ -76,7 +82,7 @@ class TodoControllerView extends React.Component {
 function select(state) {
 
   return {
-    newItemText: state.newItemText,
+    todoItemText: state.todoItemText,
     todos: state.todos,
     inProgress: state.inProgress,
     completingId: state.completingId,
