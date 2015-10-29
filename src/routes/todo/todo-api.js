@@ -2,6 +2,7 @@
 
 import request from 'superagent';
 import Q from 'q';
+import {getSessionId} from '../../shared/socket';
 
 const URI = "http://localhost:3000/api/";
 
@@ -46,6 +47,7 @@ export default class TodoApi {
 
     request
       .del(`${URI}todo/${id}`)
+      .set('ws-session-id', getSessionId())
       .accept('json')
       .end(this._responseHandler(defer));
 
@@ -57,6 +59,7 @@ export default class TodoApi {
 
     request
       .put(`${URI}todo/complete/${id}`)
+      .set('ws-session-id', getSessionId())
       .accept('json')
       .end(this._responseHandler(defer));
 
@@ -68,6 +71,7 @@ export default class TodoApi {
 
     request
       .put(`${URI}todo/uncomplete/${id}`)
+      .set('ws-session-id', getSessionId())
       .accept('json')
       .end(this._responseHandler(defer));
 
@@ -82,6 +86,7 @@ export default class TodoApi {
     if (todo._id) {
       request
         .put(`${URI}todo/${todo._id}`)
+        .set('ws-session-id', getSessionId())
         .type('json')
         .accept('json')
         .send(todo)
@@ -89,6 +94,7 @@ export default class TodoApi {
     } else {
       request
         .post(`${URI}todo`)
+        .set('ws-session-id', getSessionId())
         .type('json')
         .accept('json')
         .send(todo)

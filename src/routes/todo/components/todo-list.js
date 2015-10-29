@@ -8,6 +8,7 @@ export default class TodoList extends Component {
 
   render() {
     const {
+      refreshTodo,
       todos,
       todoBeingEdited,
       removeTodoClick,

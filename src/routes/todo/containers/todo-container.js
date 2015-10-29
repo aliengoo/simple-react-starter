@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {getSocket} from '../../../shared/socket';
+import {getSocket, getSessionId} from '../../../shared/socket';
 
 // shared components
 import NavBar from '../../../shared/nav-bar';
@@ -28,12 +28,40 @@ import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
 import UpdateTodoStartedAction from '../actions/update-todo-started-action';
 import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
 import UpdateTodoBeingEditedTextAction from '../actions/update-todo-being-edited-text-action';
+import SocketUpdateTodoAction from '../actions/socket-update-todo-action';
+import SocketNewTodoAction from '../actions/socket-new-todo-action';
+import SocketDeleteTodoAction from '../actions/socket-delete-todo-action';
 
 class TodoContainer extends React.Component {
 
   constructor(props) {
     super(props);
   }
+
+  componentWillMount() {
+    var socket = getSocket();
+
+    const {dispatch} = this.props;
+
+    socket.on('todoUpdated', (data) => {
+      if (data.sessionId !== getSessionId()) {
+        dispatch(SocketUpdateTodoAction.create(data.todo));
+      }
+    });
+
+    socket.on('todoAdded', (data) => {
+      if (data.sessionId !== getSessionId()) {
+        dispatch(SocketNewTodoAction.create(data.todo));
+      }
+    });
+
+    socket.on('todoDeleted', (data) => {
+      if (data.sessionId !== getSessionId()) {
+        dispatch(SocketDeleteTodoAction.create(data.id));
+      }
+    });
+  }
+
 
   componentDidMount() {
     // when the container, or "smart" component loads, find all the todos

@@ -10,6 +10,9 @@ import FindAllTodosAction from '../actions/find-all-todos-action';
 import UpdateTodoStartedAction from '../actions/update-todo-started-action';
 import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
 import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
+import SocketUpdateTodoAction from '../actions/socket-update-todo-action';
+import SocketNewTodoAction from '../actions/socket-new-todo-action';
+import SocketDeleteTodoAction from '../actions/socket-delete-todo-action';
 
 import _ from 'lodash';
 
@@ -102,6 +105,34 @@ function updateTodoAbortReducer(todos = [], action) {
   return todos;
 }
 
+// handlers for web socket updates
+function socketUpdateTodoReducer(todos = [], action) {
+
+  let indexOfTodo = _.findIndex(todos, (item) => item._id === action.todo._id);
+
+  return [
+    ...todos.slice(0, indexOfTodo),
+    action.todo,
+    ...todos.slice(indexOfTodo + 1)
+  ];
+}
+
+function socketNewTodoReducer(todos = [], action) {
+  return [
+    action.todo,
+    ...todos
+  ];
+}
+
+function socketDeleteTodoReducer(todos = [], action) {
+  var result = [..._.filter(todos, (item) => item._id !== action.id)];
+
+  console.log(result);
+
+  return result;
+}
+
+
 /**
  *
  * @param todos - the todos part of the app state
@@ -109,10 +140,6 @@ function updateTodoAbortReducer(todos = [], action) {
  * @returns {Array}
  */
 export default function todos(todos = [], action) {
-
-  if (action._asyncStatus !== AsyncStatus.COMPLETE) {
-    return todos;
-  }
 
   switch (action.type) {
     case AddTodoAction.type:
@@ -129,7 +156,12 @@ export default function todos(todos = [], action) {
       return updateTodoCommitReducer(todos, action);
     case UpdateTodoAbortedAction.type:
       return updateTodoAbortReducer(todos, action);
-      break;
+    case SocketUpdateTodoAction.type:
+      return socketUpdateTodoReducer(todos, action);
+    case SocketDeleteTodoAction.type:
+      return socketDeleteTodoReducer(todos, action);
+    case SocketNewTodoAction.type:
+      return socketNewTodoReducer(todos, action);
     default:
       return todos;
   }

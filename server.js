@@ -36,7 +36,6 @@ function resultCallback(httpResponse) {
    }
 }
 
-
 app.get('/api/todos', function (req, res) {
   Todo.find().exec(resultCallback(res));
 });
@@ -47,7 +46,13 @@ app.put('/api/todo/:id', function (req, res) {
   }, req.body, {
     'new': true,
     upsert: true
-  }, resultCallback(res));
+  }, function(err, updatedTodo){
+    io.emit("todoUpdated", {
+      sessionId: req.header("ws-session-id"),
+      todo: updatedTodo
+    });
+    resultCallback(res)(err, updatedTodo);
+  });
 });
 
 app.put('/api/todo/complete/:id', function (req, res) {
@@ -61,7 +66,13 @@ app.put('/api/todo/complete/:id', function (req, res) {
   }, {
     'new': true,
     upsert: false
-  }, resultCallback(res));
+  }, function(err, updatedTodo){
+    io.emit("todoUpdated", {
+      sessionId: req.header("ws-session-id"),
+      todo: updatedTodo
+    });
+    resultCallback(res)(err, updatedTodo);
+  });
 });
 
 app.put('/api/todo/uncomplete/:id', function (req, res) {
@@ -75,7 +86,13 @@ app.put('/api/todo/uncomplete/:id', function (req, res) {
   }, {
     'new': true,
     upsert: false
-  }, resultCallback(res));
+  }, function(err, updatedTodo){
+    io.emit("todoUpdated", {
+      sessionId: req.header("ws-session-id"),
+      todo: updatedTodo
+    });
+    resultCallback(res)(err, updatedTodo);
+  });
 });
 
 
@@ -88,6 +105,10 @@ app.post('/api/todo', function (req, res) {
         err: err
       });
     } else {
+      io.emit("todoAdded", {
+        sessionId: req.header("ws-session-id"),
+        todo: todo
+      });
       res.json(todo);
     }
   });
@@ -100,6 +121,10 @@ app.delete('/api/todo/:id', function (req, res) {
         err: err
       });
     } else {
+      io.emit("todoDeleted", {
+        sessionId: req.header("ws-session-id"),
+        id: req.params.id
+      });
       res.status(200).send({
         status: "deleted"
       });
