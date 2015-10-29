@@ -1,20 +1,21 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-import TodoApi from '../todo-api';
+import {getSocket} from '../todo-socket-handler';
+import Q from 'q';
 
-let todoApi = new TodoApi();
+var socket = getSocket();
 
 const ADD_TODO = "ADD_TODO";
 
-function addTodoStart() {
+function fetching() {
   return {
     type: ADD_TODO,
     _asyncStatus: AsyncStatus.FETCHING
   };
 }
 
-function addTodoEnd(todo) {
+function complete(todo) {
   return {
     type: ADD_TODO,
     todo,
@@ -22,7 +23,7 @@ function addTodoEnd(todo) {
   };
 }
 
-function addTodoErr(err) {
+function failed(err) {
   return {
     type: ADD_TODO,
     err: err.message,
@@ -30,17 +31,32 @@ function addTodoErr(err) {
   };
 }
 
-function addTodo(text) {
+function create(text) {
+
   return dispatch => {
-    dispatch(addTodoStart());
-    return todoApi.save({
+
+    var defer = Q.defer();
+
+    socket.emit(ADD_TODO, {
+      todo: {
         text: text
-      })
-      .then(todo => dispatch(addTodoEnd(todo)), (err) => addTodoErr(err));
+      }
+    });
+
+    socket.on(ADD_TODO, function (data) {
+      if (data.err) {
+        dispatch(failed(data.err));
+      } else {
+        dispatch(complete(data.todo));
+      }
+    });
+
+    return Q.when(fetching());
   };
 }
 
+
 export default {
-  create: addTodo,
+  create: create,
   type: ADD_TODO
 };

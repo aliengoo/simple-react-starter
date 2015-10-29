@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {getSocket, getSessionId} from '../../../shared/socket';
+import {getSocket, getSessionId} from '../socket';
 
 // shared components
 import NavBar from '../../../shared/nav-bar';

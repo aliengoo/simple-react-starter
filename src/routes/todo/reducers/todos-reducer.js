@@ -6,12 +6,12 @@ import AddTodoAction from '../actions/add-todo-action';
 import CompleteTodoAction from '../actions/complete-todo-action';
 import UncompleteTodoAction from '../actions/uncomplete-todo-action';
 import RemoveTodoAction from '../actions/remove-todo-action';
-import FindAllTodosAction from '../actions/find-all-todos-action';
+import GetAllTodosAction from '../actions/get-all-todos-action';
 import UpdateTodoStartedAction from '../actions/update-todo-started-action';
 import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
 import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
 import SocketUpdateTodoAction from '../actions/socket-update-todo-action';
-import SocketNewTodoAction from '../actions/socket-new-todo-action';
+import AddTodoNotificationAction from '../actions/add-todo-notification-action';
 import SocketDeleteTodoAction from '../actions/socket-delete-todo-action';
 
 import _ from 'lodash';
@@ -117,7 +117,7 @@ function socketUpdateTodoReducer(todos = [], action) {
   ];
 }
 
-function socketNewTodoReducer(todos = [], action) {
+function addTodoNotificationReducer(todos = [], action) {
   return [
     action.todo,
     ...todos
@@ -125,13 +125,8 @@ function socketNewTodoReducer(todos = [], action) {
 }
 
 function socketDeleteTodoReducer(todos = [], action) {
-  var result = [..._.filter(todos, (item) => item._id !== action.id)];
-
-  console.log(result);
-
-  return result;
+  return [..._.filter(todos, (item) => item._id !== action.id)];
 }
-
 
 /**
  *
@@ -150,7 +145,7 @@ export default function todos(todos = [], action) {
       return uncompleteTodoReducer(todos, action);
     case RemoveTodoAction.type:
       return removeTodoReducer(todos, action);
-    case FindAllTodosAction.type:
+    case GetAllTodosAction.type:
       return findAllTodosReducer(todos, action);
     case UpdateTodoCommitAction.type:
       return updateTodoCommitReducer(todos, action);
@@ -160,8 +155,8 @@ export default function todos(todos = [], action) {
       return socketUpdateTodoReducer(todos, action);
     case SocketDeleteTodoAction.type:
       return socketDeleteTodoReducer(todos, action);
-    case SocketNewTodoAction.type:
-      return socketNewTodoReducer(todos, action);
+    case AddTodoNotificationAction.type:
+      return addTodoNotificationReducer(todos, action);
     default:
       return todos;
   }

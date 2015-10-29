@@ -2,7 +2,7 @@
 
 import request from 'superagent';
 import Q from 'q';
-import {getSessionId} from '../../shared/socket';
+import {getSessionId} from 'socket';
 
 const URI = "http://localhost:3000/api/";
 

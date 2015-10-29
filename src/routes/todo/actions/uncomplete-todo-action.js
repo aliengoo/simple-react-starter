@@ -1,13 +1,14 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-import TodoApi from '../todo-api';
+import {getSocket} from '../todo-socket-handler';
+import Q from 'q';
 
-let todoApi = new TodoApi();
+var socket = getSocket();
 
 const UNCOMPLETE_TODO = "UNCOMPLETE_TODO";
 
-function uncompleteTodoFetching(id) {
+function fetching(id) {
   return {
     type: UNCOMPLETE_TODO,
     id,
@@ -15,7 +16,7 @@ function uncompleteTodoFetching(id) {
   };
 }
 
-function uncompleteTodoComplete(id) {
+function complete(id) {
   return {
     type: UNCOMPLETE_TODO,
     id,
@@ -23,7 +24,7 @@ function uncompleteTodoComplete(id) {
   };
 }
 
-function uncompleteTodoFailed(err) {
+function failed(err) {
   return {
     type: UNCOMPLETE_TODO,
     err: err.message,
@@ -31,15 +32,27 @@ function uncompleteTodoFailed(err) {
   };
 }
 
-function uncompleteTodo(id) {
+function create(id) {
+
   return dispatch => {
-    dispatch(uncompleteTodoFetching(id));
-    return todoApi.uncomplete(id)
-      .then(todo => dispatch(uncompleteTodoComplete(id)), (err) => uncompleteTodoFailed(err));
+    socket.emit(UNCOMPLETE_TODO, {
+      id
+    });
+
+    socket.on(UNCOMPLETE_TODO, function (data) {
+      if (data.err) {
+        dispatch(failed(data.err));
+      } else {
+        dispatch(complete(data.todo));
+      }
+    });
+
+    return Q.when(fetching());
   };
 }
 
+
 export default {
-  create: uncompleteTodo,
+  create: create,
   type: UNCOMPLETE_TODO
 };

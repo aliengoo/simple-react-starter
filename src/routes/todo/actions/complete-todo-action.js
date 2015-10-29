@@ -1,10 +1,17 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
+import {getSocket} from '../todo-socket-handler';
 
-import TodoApi from '../todo-api';
+var socket = getSocket();
 
-let todoApi = new TodoApi();
+socket.on('completeTodo:result', function (data) {
+  if (data.err) {
+    completeTodoFailed(data.err);
+  } else {
+    completeTodoCompleted(data.todo);
+  }
+});
 
 const COMPLETE_TODO = "COMPLETE_TODO";
 
@@ -33,11 +40,14 @@ function completeTodoFailed(err) {
 }
 
 function completeTodo(id) {
-  return dispatch => {
-    dispatch(completeTodoFetching(id));
-    return todoApi.complete(id)
-      .then(todo => dispatch(completeTodoCompleted(id)), (err) => completeTodoFailed(err));
-  };
+
+
+  socket.emit('completeTodo', {
+    id: id
+  });
+  return completeTodoFetching(id);
+
+
 }
 
 export default {
