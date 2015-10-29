@@ -5,6 +5,8 @@ window._ = require('lodash');
 require('bootstrap');
 require('parsleyjs');
 
+import {getSocket} from './shared/socket';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link} from 'react-router';

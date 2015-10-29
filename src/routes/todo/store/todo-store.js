@@ -7,7 +7,6 @@ import rootReducer from '../reducers/todo-root-reducer';
 // Redux DevTools store enhancers
 import { devTools, persistState } from 'redux-devtools';
 
-
 const initialState = {
   todoItemText: "",
   inProgress: false,

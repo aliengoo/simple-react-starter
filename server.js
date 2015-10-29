@@ -7,6 +7,9 @@ var express = require("express")
   delay = require('express-delay');
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 //app.use(delay(1000));
 app.use(bodyParser.json());
 app.use(cors());
@@ -21,91 +24,63 @@ var Todo = mongoose.model('Todo', {
   }
 });
 
+function resultCallback(httpResponse) {
+   return function(err, data) {
+     if (err) {
+       httpResponse.status(500).send({
+         err: err
+       });
+     } else {
+       httpResponse.json(data);
+     }
+   }
+}
+
 
 app.get('/api/todos', function (req, res) {
-  Todo.find().exec(function (err, todos) {
-    if (err) {
-      res.status(500).send({
-        err: err
-      });
-    } else {
-      res.json(todos);
-    }
-  });
+  Todo.find().exec(resultCallback(res));
 });
 
 app.put('/api/todo/:id', function (req, res) {
-
-  var query = {
+  Todo.findOneAndUpdate({
     _id: req.params.id
-  };
-
-  var options = {
+  }, req.body, {
     'new': true,
     upsert: true
-  };
-
-  Todo.findOneAndUpdate(query, req.body, options, function(err, todo){
-    if (err) {
-      res.status(500).send({
-        err: err
-      })
-    } else {
-      res.json(todo);
-    }
-  });
+  }, resultCallback(res));
 });
 
 app.put('/api/todo/complete/:id', function (req, res) {
 
-  Todo.findById(req.params.id, function (err, todo) {
-    if (err) {
-      res.status(500).send({
-        err: err
-      });
-    } else {
-      todo.completed = true;
-
-      todo.save(function (err) {
-        if (err) {
-          res.status(500).send({
-            err: err
-          });
-        } else {
-          res.json(todo);
-        }
-      });
+  Todo.findOneAndUpdate({
+    _id: req.params.id
+  }, {
+    $set: {
+      completed: true
     }
-  })
+  }, {
+    'new': true,
+    upsert: false
+  }, resultCallback(res));
 });
 
 app.put('/api/todo/uncomplete/:id', function (req, res) {
 
-  Todo.findById(req.params.id, function (err, todo) {
-    if (err) {
-      res.status(500).send({
-        err: err
-      });
-    } else {
-      todo.completed = false;
-
-      todo.save(function (err) {
-        if (err) {
-          res.status(500).send({
-            err: err
-          });
-        } else {
-          res.json(todo);
-        }
-      });
+  Todo.findOneAndUpdate({
+    _id: req.params.id
+  }, {
+    $set: {
+      completed: false
     }
-  })
+  }, {
+    'new': true,
+    upsert: false
+  }, resultCallback(res));
 });
 
 
 app.post('/api/todo', function (req, res) {
   var todo = new Todo(req.body);
-  console.log(req.body);
 
   todo.save(function (err) {
     if (err) {
@@ -146,6 +121,11 @@ app.get('/api/todo/:id', function (req, res) {
   })
 });
 
-app.listen(3000, function () {
+
+io.on('connection', function (socket) {
+  console.log("New client connected");
+});
+
+server.listen(3000, function () {
   console.log("Server listening on port 3000...");
 });

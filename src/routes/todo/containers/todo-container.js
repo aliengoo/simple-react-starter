@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import {getSocket} from '../../../shared/socket';
 
 // shared components
 import NavBar from '../../../shared/nav-bar';
@@ -104,6 +105,7 @@ class TodoContainer extends React.Component {
 function select(state) {
 
   return {
+    socket: state.socket,
     todoItemText: state.todoItemText,
     todoBeingEdited: state.todoBeingEdited,
     todoBeingEditedPriorState: state.todoBeingEditedPriorState,

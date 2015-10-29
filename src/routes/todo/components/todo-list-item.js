@@ -15,11 +15,26 @@ export default class TodoListItem extends Component {
     };
 
     this._enableEdit = this._enableEdit.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
   }
 
   _enableEdit() {
     if (this.state.ready) {
       this.props.updateTodoStartedClick(this.props.todo);
+    }
+  }
+
+  /**
+   * Handle the user hitting enter - this fires an addTodoClick if there is anything in the todoInput.
+   * @param e - the keyDown event
+   * @private - internal function
+   */
+  _onKeyDown(e) {
+
+    if (e.keyCode === 13 && (this.refs.editTodoInput.value || "").length > 0) {
+      this.props.updateTodoCommitClick(this.props.todoBeingEdited);
+    } else if (e.keyCode === 27) {
+      this.props.updateTodoAbortedClick(this.props.todoBeingEditedPriorState);
     }
   }
 
@@ -33,7 +48,6 @@ export default class TodoListItem extends Component {
     const {
       todo,
       removeTodoClick,
-      updateTodoStartedClick,
       updateTodoAbortedClick,
       updateTodoCommitClick,
       updateTodoBeingEditedTextChanged,
@@ -45,17 +59,17 @@ export default class TodoListItem extends Component {
 
     var isBeingEdited = !!todoBeingEdited && todoBeingEdited._id === todo._id;
 
-
     var task = <div onClick={this._enableEdit}>{todo.text}</div>;
 
     if (todo.completed === true) {
-      task = <div className="task-completed">{task}</div>;
+      task = <div className="task-completed">{todo.text}</div>;
     }
 
     if (isBeingEdited) {
       task = (<input
         ref="editTodoInput"
         defaultValue={todoBeingEdited.text}
+        onKeyDown={this._onKeyDown}
         className="form-control input-lg"
         onChange={(e) => updateTodoBeingEditedTextChanged(e.target.value)}/>);
     }
