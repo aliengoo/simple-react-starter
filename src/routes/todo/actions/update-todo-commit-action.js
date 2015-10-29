@@ -6,19 +6,19 @@ import TodoApi from '../todo-api';
 const UPDATE_TODO_COMMIT = "UPDATE_TODO_COMMIT";
 let todoApi = new TodoApi();
 
-function updateTodoCommitFetching(todo) {
+function updateTodoCommitFetching(todoBeingEdited) {
   return {
     type: UPDATE_TODO_COMMIT,
     _asyncStatus: AsyncStatus.FETCHING,
-    todo
+    todoBeingEdited
   };
 }
 
-function updateTodoCommitComplete(todo) {
+function updateTodoCommitComplete(updatedTodo) {
   return {
     type: UPDATE_TODO_COMMIT,
     _asyncStatus: AsyncStatus.COMPLETE,
-    todo
+    updatedTodo
   };
 }
 
@@ -30,11 +30,11 @@ function updateTodoCommitFailed(err) {
   };
 }
 
-function updateTodoCommit(todo) {
+function updateTodoCommit(todoBeingEdited) {
   return dispatch => {
-    updateTodoCommitFetching(todo);
+    updateTodoCommitFetching(todoBeingEdited);
     return todoApi
-      .save(todo)
+      .save(todoBeingEdited)
       .then(
         updatedTodo => dispatch(updateTodoCommitComplete(updatedTodo)),
         err => dispatch(updateTodoCommitFailed(err)));

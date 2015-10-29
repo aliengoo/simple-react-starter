@@ -2,36 +2,67 @@
 
 import React, {Component, PropTypes} from 'react';
 
-import TodoCompleteBtn from './todo-complete-btn';
-import TodoUncompleteBtn from './todo-uncomplete-btn';
-import TodoRemoveBtn from './todo-remove-btn';
+import CompleteTodoBtn from './complete-todo-btn';
+import UncompleteTodoBtn from './uncomplete-todo-btn';
+import RemoveTodoBtn from './remove-todo-btn';
+
+import UpdateTodoAbortBtn from './update-todo-abort-btn';
+import UpdateTodoCommitBtn from './update-todo-commit-btn';
 
 export default class TodoListItemControls extends Component {
   render() {
 
-    const {completeTodoClick, uncompleteTodoClick, removeTodoClick, todo, inProgress, activeTodoId} = this.props;
+    const {
+      completeTodoClick,
+      updateTodoAbortedClick,
+      updateTodoCommitClick,
+      uncompleteTodoClick,
+      todoBeingEdited,
+      removeTodoClick,
+      todo,
+      inProgress,
+      activeTodoId} = this.props;
 
     return (
       <div className="todo-list-item-controls">
         <div>
-          <TodoCompleteBtn
+          <CompleteTodoBtn
             completeTodoClick={completeTodoClick}
             inProgress={inProgress}
             activeTodoId={activeTodoId}
+            todoBeingEdited={todoBeingEdited}
             todo={todo}/>
 
-          <TodoUncompleteBtn
+          <UncompleteTodoBtn
             uncompleteTodoClick={uncompleteTodoClick}
             inProgress={inProgress}
             activeTodoId={activeTodoId}
+            todoBeingEdited={todoBeingEdited}
             todo={todo}/>
 
-
-          <TodoRemoveBtn
+          <RemoveTodoBtn
             removeTodoClick={removeTodoClick}
             inProgress={inProgress}
             activeTodoId={activeTodoId}
+            todoBeingEdited={todoBeingEdited}
             todo={todo}/>
+
+
+          <UpdateTodoCommitBtn
+            updateTodoCommitClick={updateTodoCommitClick}
+            inProgress={inProgress}
+            activeTodoId={activeTodoId}
+            todo={todo}
+            todoBeingEdited={todoBeingEdited}
+          />
+
+          <UpdateTodoAbortBtn
+            updateTodoAbortedClick={updateTodoAbortedClick}
+            inProgress={inProgress}
+            activeTodoId={activeTodoId}
+            todo={todo}
+            todoBeingEdited={todoBeingEdited}
+          />
         </div>
       </div>
     );
@@ -40,9 +71,7 @@ export default class TodoListItemControls extends Component {
 
 TodoListItemControls.propTypes = {
   todo: PropTypes.object.isRequired,
-  todoBeingEditedPriorState: PropTypes.object,
   todoBeingEdited: PropTypes.object,
-  updateTodoStartedClick: PropTypes.func.isRequired,
   updateTodoCommitClick: PropTypes.func.isRequired,
   updateTodoAbortedClick: PropTypes.func.isRequired,
   inProgress: PropTypes.bool,

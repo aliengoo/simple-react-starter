@@ -21,6 +21,7 @@ body {
   flex-direction: row; }
 
 .todo-list-item-task {
+  margin-top: 3px;
   -webkit-flex: 7;
   -ms-flex: 7;
   flex: 7; }

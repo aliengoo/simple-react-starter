@@ -7,16 +7,32 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 export default class TodoList extends Component {
 
   render() {
-    const {todos, todoBeingEditedPriorState, todoBeingEdited, removeTodoClick, uncompleteTodoClick, completeTodoClick, inProgress, activeTodoId} = this.props;
+    const {
+      todos,
+      todoBeingEdited,
+      removeTodoClick,
+      uncompleteTodoClick,
+      completeTodoClick,
+      updateTodoBeingEditedTextChanged,
+      updateTodoStartedClick,
+      updateTodoCommitClick,
+      updateTodoAbortedClick,
+      inProgress,
+      activeTodoId} = this.props;
 
     var items = todos.map((todo, key) =>
       (<TodoListItem
         key={key}
         todo={todo}
+        updateTodoBeingEditedTextChanged={updateTodoBeingEditedTextChanged}
+        updateTodoAbortedClick={updateTodoAbortedClick}
+        updateTodoStartedClick={updateTodoStartedClick}
+        updateTodoCommitClick={updateTodoCommitClick}
         removeTodoClick={removeTodoClick}
         completeTodoClick={completeTodoClick}
         uncompleteTodoClick={uncompleteTodoClick}
         inProgress={inProgress}
+        todoBeingEdited={todoBeingEdited}
         activeTodoId={activeTodoId}/>));
 
     return (
@@ -32,8 +48,8 @@ export default class TodoList extends Component {
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
-  todoBeingEditedPriorState: PropTypes.object,
   todoBeingEdited: PropTypes.object,
+  updateTodoBeingEditedTextChanged: PropTypes.func.isRequired,
   updateTodoStartedClick: PropTypes.func.isRequired,
   updateTodoCommitClick: PropTypes.func.isRequired,
   updateTodoAbortedClick: PropTypes.func.isRequired,

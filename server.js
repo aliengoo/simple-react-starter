@@ -22,9 +22,9 @@ var Todo = mongoose.model('Todo', {
 });
 
 
-app.get('/api/todos', function(req, res) {
+app.get('/api/todos', function (req, res) {
   Todo.find().exec(function (err, todos) {
-    if(err) {
+    if (err) {
       res.status(500).send({
         err: err
       });
@@ -34,9 +34,31 @@ app.get('/api/todos', function(req, res) {
   });
 });
 
+app.put('/api/todo/:id', function (req, res) {
+
+  var query = {
+    _id: req.params.id
+  };
+
+  var options = {
+    'new': true,
+    upsert: true
+  };
+
+  Todo.findOneAndUpdate(query, req.body, options, function(err, todo){
+    if (err) {
+      res.status(500).send({
+        err: err
+      })
+    } else {
+      res.json(todo);
+    }
+  });
+});
+
 app.put('/api/todo/complete/:id', function (req, res) {
 
-  Todo.findById(req.params.id, function(err, todo) {
+  Todo.findById(req.params.id, function (err, todo) {
     if (err) {
       res.status(500).send({
         err: err
@@ -59,7 +81,7 @@ app.put('/api/todo/complete/:id', function (req, res) {
 
 app.put('/api/todo/uncomplete/:id', function (req, res) {
 
-  Todo.findById(req.params.id, function(err, todo) {
+  Todo.findById(req.params.id, function (err, todo) {
     if (err) {
       res.status(500).send({
         err: err
@@ -97,7 +119,7 @@ app.post('/api/todo', function (req, res) {
 });
 
 app.delete('/api/todo/:id', function (req, res) {
-  Todo.remove({_id: req.params.id}, function (err){
+  Todo.remove({_id: req.params.id}, function (err) {
     if (err) {
       res.status(500).send({
         err: err
@@ -113,7 +135,7 @@ app.delete('/api/todo/:id', function (req, res) {
 
 
 app.get('/api/todo/:id', function (req, res) {
-  Todo.findById(req.params.id, function(err, todo) {
+  Todo.findById(req.params.id, function (err, todo) {
     if (err) {
       res.status(500).send({
         err: err

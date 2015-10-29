@@ -1,11 +1,20 @@
 "use strict";
 
-import ActionStatus from '../../../shared/async-status';
-import ActionTypes from '../actions/todo-action-types';
+import AsyncStatus from '../../../shared/async-status';
+
+import AddTodoAction from '../actions/add-todo-action';
+import CompleteTodoAction from '../actions/complete-todo-action';
+import UncompleteTodoAction from '../actions/uncomplete-todo-action';
+import RemoveTodoAction from '../actions/remove-todo-action';
+import FindAllTodosAction from '../actions/find-all-todos-action';
+import UpdateTodoStartedAction from '../actions/update-todo-started-action';
+import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
+import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
+
 import _ from 'lodash';
 
 function addTodoReducer(todos, action) {
-  if (action._asyncStatus === ActionStatus.COMPLETE) {
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
     return [action.todo, ...todos];
   }
 
@@ -14,7 +23,7 @@ function addTodoReducer(todos, action) {
 
 function completeTodoReducer(todos, action) {
 
-  if (action._asyncStatus === ActionStatus.COMPLETE) {
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
     let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
 
     return [
@@ -30,7 +39,7 @@ function completeTodoReducer(todos, action) {
 }
 
 function uncompleteTodoReducer(todos, action) {
-  if (action._asyncStatus === ActionStatus.COMPLETE) {
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
     let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
 
     return [
@@ -48,7 +57,7 @@ function uncompleteTodoReducer(todos, action) {
 
 function removeTodoReducer(todos, action) {
 
-  if (action._asyncStatus === ActionStatus.COMPLETE) {
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
     let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
 
     return [
@@ -64,6 +73,35 @@ function findAllTodosReducer(todos = [], action) {
   return action.todos || todos;
 }
 
+function updateTodoCommitReducer(todos = [], action) {
+
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.updatedTodo._id);
+
+    return [
+      ...todos.slice(0, indexOfTodo),
+      action.updatedTodo,
+      ...todos.slice(indexOfTodo + 1)
+    ];
+  }
+
+  return todos;
+}
+
+function updateTodoAbortReducer(todos = [], action) {
+  if (action._asyncStatus === AsyncStatus.COMPLETE) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.todoBeingEditedPriorState._id);
+
+    return [
+      ...todos.slice(0, indexOfTodo),
+      action.todoBeingEditedPriorState,
+      ...todos.slice(indexOfTodo + 1)
+    ];
+  }
+
+  return todos;
+}
+
 /**
  *
  * @param todos - the todos part of the app state
@@ -72,21 +110,26 @@ function findAllTodosReducer(todos = [], action) {
  */
 export default function todos(todos = [], action) {
 
-  if (action._asyncCompleted === false) {
+  if (action._asyncStatus !== AsyncStatus.COMPLETE) {
     return todos;
   }
 
-  switch(action.type) {
-    case ActionTypes.ADD_TODO:
+  switch (action.type) {
+    case AddTodoAction.type:
       return addTodoReducer(todos, action);
-    case ActionTypes.COMPLETE_TODO:
+    case CompleteTodoAction.type:
       return completeTodoReducer(todos, action);
-    case ActionTypes.UNCOMPLETE_TODO:
+    case UncompleteTodoAction.type:
       return uncompleteTodoReducer(todos, action);
-    case ActionTypes.REMOVE_TODO:
+    case RemoveTodoAction.type:
       return removeTodoReducer(todos, action);
-    case ActionTypes.FIND_ALL_TODOS:
+    case FindAllTodosAction.type:
       return findAllTodosReducer(todos, action);
+    case UpdateTodoCommitAction.type:
+      return updateTodoCommitReducer(todos, action);
+    case UpdateTodoAbortedAction.type:
+      return updateTodoAbortReducer(todos, action);
+      break;
     default:
       return todos;
   }

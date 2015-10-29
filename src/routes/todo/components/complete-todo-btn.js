@@ -2,11 +2,11 @@
 
 import React, {Component, PropTypes} from 'react';
 
-export default class TodoCompleteBtn extends Component {
+export default class CompleteTodoBtn extends Component {
   render() {
-    const {inProgress, completeTodoClick, todo, activeTodoId} = this.props;
+    const {inProgress, completeTodoClick, todo, todoBeingEdited, activeTodoId} = this.props;
 
-    let klassName = `btn btn-success ${todo.completed ? 'hide' : ''}`;
+    let klassName = `btn btn-success  btn-lg ${todo.completed || !!todoBeingEdited ? 'hide' : ''}`;
 
     let icon = <i className="fa fa-check"/>;
 
@@ -26,7 +26,8 @@ export default class TodoCompleteBtn extends Component {
   }
 }
 
-TodoCompleteBtn.propTypes = {
+CompleteTodoBtn.propTypes = {
+  todoBeingEdited: PropTypes.object,
   inProgress: PropTypes.bool,
   activeTodoId: PropTypes.string,
   completeTodoClick: PropTypes.func.isRequired,

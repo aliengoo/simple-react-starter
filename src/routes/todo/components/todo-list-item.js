@@ -2,29 +2,62 @@
 
 import React, {Component, PropTypes} from 'react';
 import TodoListItemControls from './todo-list-item-controls';
+import $ from 'jquery';
+
+import instance from '../store/todo-store';
 
 export default class TodoListItem extends Component {
 
-  render() {
-    const {todo, removeTodoClick, todoBeingEdited, todoBeingEditedPriorState, completeTodoClick, uncompleteTodoClick, inProgress, activeTodoId} = this.props;
+  constructor() {
+    super();
+    this.state = {
+      ready: false
+    };
 
-    var task = <span>{todo.text}</span>;
+    this._enableEdit = this._enableEdit.bind(this);
+  }
+
+  _enableEdit() {
+    if (this.state.ready) {
+      this.props.updateTodoStartedClick(this.props.todo);
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      ready: true
+    });
+  }
+
+  render() {
+    const {
+      todo,
+      removeTodoClick,
+      updateTodoStartedClick,
+      updateTodoAbortedClick,
+      updateTodoCommitClick,
+      updateTodoBeingEditedTextChanged,
+      todoBeingEdited,
+      completeTodoClick,
+      uncompleteTodoClick,
+      inProgress,
+      activeTodoId} = this.props;
+
+    var isBeingEdited = !!todoBeingEdited && todoBeingEdited._id === todo._id;
+
+
+    var task = <div onClick={this._enableEdit}>{todo.text}</div>;
 
     if (todo.completed === true) {
-      task = <span className="task-completed">{task}</span>;
+      task = <div className="task-completed">{task}</div>;
     }
 
-    var controls = (<TodoListItemControls
-      completeTodoClick={completeTodoClick}
-      uncompleteTodoClick={uncompleteTodoClick}
-      removeTodoClick={removeTodoClick}
-      todo={todo}
-      inProgress={inProgress}
-      activeTodoId={activeTodoId}
-    />);
-
-    if (todoBeingEditedPriorState !== null) {
-      controls = (<div></div>);
+    if (isBeingEdited) {
+      task = (<input
+        ref="editTodoInput"
+        defaultValue={todoBeingEdited.text}
+        className="form-control input-lg"
+        onChange={(e) => updateTodoBeingEditedTextChanged(e.target.value)}/>);
     }
 
     return (
@@ -32,15 +65,26 @@ export default class TodoListItem extends Component {
         <div className="todo-list-item-task">
           {task}
         </div>
-        {controls}
+        <TodoListItemControls
+          updateTodoBeingEditedTextChanged={updateTodoBeingEditedTextChanged}
+          updateTodoAbortedClick={updateTodoAbortedClick}
+          updateTodoCommitClick={updateTodoCommitClick}
+          completeTodoClick={completeTodoClick}
+          uncompleteTodoClick={uncompleteTodoClick}
+          removeTodoClick={removeTodoClick}
+          todo={todo}
+          todoBeingEdited={todoBeingEdited}
+          inProgress={inProgress}
+          activeTodoId={activeTodoId}
+        />
       </div>
     );
   }
 }
 
 TodoListItem.propTypes = {
-  todoBeingEditedPriorState: PropTypes.object,
   todoBeingEdited: PropTypes.object,
+  updateTodoBeingEditedTextChanged: PropTypes.func.isRequired,
   updateTodoStartedClick: PropTypes.func.isRequired,
   updateTodoCommitClick: PropTypes.func.isRequired,
   updateTodoAbortedClick: PropTypes.func.isRequired,

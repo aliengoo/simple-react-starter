@@ -43,4 +43,4 @@ function addTodo(text) {
 export default {
   create: addTodo,
   type: ADD_TODO
-}
+};

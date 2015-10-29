@@ -20,7 +20,7 @@ export default class TodoInput extends React.Component {
   }
 
   componentDidUpdate() {
-    this.refs.todoInput.focus();
+    //this.refs.todoInput.focus();
   }
 
   _stateChanged() {

@@ -17,7 +17,7 @@ export default function todoBeingEditedPriorStateReducer(todoBeingEditedPriorSta
   var newState = todoBeingEditedPriorState;
   switch(action.type) {
     case UpdateTodoStartedAction.type:
-      newState = Object.assign({}, todoBeingEditedPriorState);
+      newState = Object.assign({}, action.todoBeingEdited);
       break;
     case UpdateTodoAbortedAction.type:
     case UpdateTodoCommitAction.type:

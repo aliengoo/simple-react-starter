@@ -26,6 +26,7 @@ import UncompleteTodoAction from '../actions/uncomplete-todo-action';
 import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
 import UpdateTodoStartedAction from '../actions/update-todo-started-action';
 import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
+import UpdateTodoBeingEditedTextAction from '../actions/update-todo-being-edited-text-action';
 
 class TodoContainer extends React.Component {
 
@@ -39,7 +40,15 @@ class TodoContainer extends React.Component {
   }
 
   render() {
-    const {dispatch, todoBeingEdited, todoBeingEditedPriorState, todos, inProgress, activeTodoId, err, todoItemText} = this.props;
+    const {
+      dispatch,
+      todoBeingEdited,
+      todoBeingEditedPriorState,
+      todos,
+      inProgress,
+      activeTodoId,
+      err,
+      todoItemText} = this.props;
 
     var alertError = <div></div>;
 
@@ -74,10 +83,10 @@ class TodoContainer extends React.Component {
               todos={todos}
               inProgress={inProgress}
               activeTodoId={activeTodoId}
-              todoBeingEdit={todoBeingEdited}
-              todoBeingEditedPriorState={todoBeingEditedPriorState}
-              updateTodoAbortedClick={(id) => dispatch(UpdateTodoAbortedAction.create(id))}
-              updateTodoCommitClick={(todo) => dispatch(UpdateTodoCommitAction.create(todo))}
+              todoBeingEdited={todoBeingEdited}
+              updateTodoBeingEditedTextChanged={(newText) => dispatch(UpdateTodoBeingEditedTextAction.create(newText))}
+              updateTodoAbortedClick={() => dispatch(UpdateTodoAbortedAction.create(todoBeingEditedPriorState))}
+              updateTodoCommitClick={() => dispatch(UpdateTodoCommitAction.create(todoBeingEdited))}
               updateTodoStartedClick={(todo) => dispatch(UpdateTodoStartedAction.create(todo))}
               uncompleteTodoClick={(id) => dispatch(UncompleteTodoAction.create(id))}
               removeTodoClick={(id) => dispatch(RemoveTodoAction.create(id))}

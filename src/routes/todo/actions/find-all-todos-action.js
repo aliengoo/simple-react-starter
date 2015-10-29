@@ -1,7 +1,6 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-import ActionTypes from './todo-action-types';
 import TodoApi from '../todo-api';
 import todoStore from '../store/todo-store';
 

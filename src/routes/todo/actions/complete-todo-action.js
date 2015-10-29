@@ -1,7 +1,7 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-import ActionTypes from './todo-action-types';
+
 import TodoApi from '../todo-api';
 
 let todoApi = new TodoApi();

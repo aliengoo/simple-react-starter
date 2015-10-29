@@ -12,8 +12,8 @@ const initialState = {
   todoItemText: "",
   inProgress: false,
   activeTodoId: "",
-  todoBeingEdited: "",
-  todoBeingEditedPriorState: "",
+  todoBeingEdited: null,
+  todoBeingEditedPriorState: null,
   err: "",
   todos: []
 };

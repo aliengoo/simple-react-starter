@@ -12,11 +12,11 @@
 }
 
 .todo-list-item-task {
+  margin-top: 3px;
   .task-completed {
     text-decoration: line-through;
     opacity: 0.5;
   }
-
 
   flex: 7;
 }

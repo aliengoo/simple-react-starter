@@ -4,10 +4,11 @@ import AsyncStatus from '../../../shared/async-status';
 
 const UPDATE_TODO_ABORTED = "UPDATE_TODO_ABORTED";
 
-function updateAbortedTodo() {
+function updateAbortedTodo(todoBeingEditedPriorState) {
   return {
-    type: UPDATE_TODO_ABORTED
-  }
+    type: UPDATE_TODO_ABORTED,
+    todoBeingEditedPriorState
+  };
 }
 
 export default {
