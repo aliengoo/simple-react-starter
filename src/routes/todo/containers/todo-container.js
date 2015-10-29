@@ -99,6 +99,7 @@ class TodoContainer extends React.Component {
         <Row>
           <Col media="sm" grid="12">
             <TodoInput
+              todoBeingEdited={todoBeingEdited}
               onChange={(e) => dispatch(TodoItemTextChangedAction.create(e.target.value))}
               addTodoClick={() => dispatch(AddTodoAction.create(todoItemText))}
               inProgress={inProgress}
@@ -133,7 +134,6 @@ class TodoContainer extends React.Component {
 function select(state) {
 
   return {
-    socket: state.socket,
     todoItemText: state.todoItemText,
     todoBeingEdited: state.todoBeingEdited,
     todoBeingEditedPriorState: state.todoBeingEditedPriorState,

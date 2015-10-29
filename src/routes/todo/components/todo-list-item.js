@@ -40,6 +40,20 @@ export default class TodoListItem extends Component {
     }
   }
 
+  _isThisTodoBeingUpdate() {
+    const {
+      todo,
+      todoBeingEdited} = this.props;
+
+    return !!todoBeingEdited && todoBeingEdited._id === todo._id;
+  }
+
+  componentDidUpdate() {
+    if (this._isThisTodoBeingUpdate()) {
+      this.refs.editTodoInput.focus();
+    }
+  }
+
   componentDidMount() {
     this.setState({
       ready: true
@@ -59,15 +73,13 @@ export default class TodoListItem extends Component {
       inProgress,
       activeTodoId} = this.props;
 
-    var isBeingEdited = !!todoBeingEdited && todoBeingEdited._id === todo._id;
-
     var task = <div onClick={this._enableEdit}>{todo.text}</div>;
 
     if (todo.completed === true) {
       task = <div className="task-completed">{todo.text}</div>;
     }
 
-    if (isBeingEdited) {
+    if (this._isThisTodoBeingUpdate()) {
       task = (<input
         ref="editTodoInput"
         defaultValue={todoBeingEdited.text}

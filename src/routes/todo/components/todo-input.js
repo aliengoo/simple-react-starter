@@ -7,6 +7,11 @@ import instance from '../store/todo-store';
 
 export default class TodoInput extends React.Component {
 
+  constructor() {
+    super();
+    this._resetFocus = this._resetFocus.bind(this);
+  }
+
   componentWillUnmount() {
     let store = instance();
 
@@ -19,10 +24,6 @@ export default class TodoInput extends React.Component {
     store.subscribe(this._stateChanged.bind(this));
   }
 
-  componentDidUpdate() {
-    //this.refs.todoInput.focus();
-  }
-
   _stateChanged() {
     let store = instance();
 
@@ -33,6 +34,10 @@ export default class TodoInput extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    this._resetFocus();
+  }
+
   /**
    * Handle the user hitting enter - this fires an addTodoClick if there is anything in the todoInput.
    * @param e - the keyDown event
@@ -41,6 +46,12 @@ export default class TodoInput extends React.Component {
   _onKeyDown(e) {
     if (e.keyCode === 13 && (this.refs.todoInput.value || "").length > 0) {
       this.props.addTodoClick();
+    }
+  }
+
+  _resetFocus() {
+    if (!(!!this.props.todoBeingEdited)) {
+      this.refs.todoInput.focus();
     }
   }
 
@@ -76,6 +87,7 @@ export default class TodoInput extends React.Component {
 }
 
 TodoInput.propTypes = {
+  todoBeingEdited: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   todoItemText: PropTypes.string,
   inProgress: PropTypes.bool,

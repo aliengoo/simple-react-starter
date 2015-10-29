@@ -38,8 +38,8 @@ export default class TodoList extends Component {
 
     return (
       <div className="todo-list">
-        <ReactCSSTransitionGroup transitionName="todo-list-item" transitionEnterTimeout={1500}
-                                 transitionLeaveTimeout={1300}>
+        <ReactCSSTransitionGroup transitionName="todo-list-item" transitionEnterTimeout={500}
+                                 transitionLeaveTimeout={300}>
           {items}
         </ReactCSSTransitionGroup>
       </div>
