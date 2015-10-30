@@ -4,7 +4,6 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { compose, createStore, applyMiddleware } from 'redux';
 import rootReducer from '../reducers/root-reducer';
-// Redux DevTools store enhancers
 import { devTools, persistState } from 'redux-devtools';
 
 const initialState = {

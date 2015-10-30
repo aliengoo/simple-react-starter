@@ -1,6 +1,12 @@
 .chat-messages {
   flex: 6;
   min-height: 500px;
-  border: 1px solid navajowhite;
+  border: 1px solid whitesmoke;
   border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-content: flex-end;
 }

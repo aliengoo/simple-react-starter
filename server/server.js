@@ -12,9 +12,17 @@ app.use(express.static("../wwwroot"));
 app.use(bodyParser.json());
 app.use(cors());
 
-var socketHandler = require('./socket-handler');
+var todoSocket = require('./todo-socket');
+var chatSocket = require('./chat-socket');
 
-socketHandler(io);
+io.sockets.on('connection', function (socket) {
+  todoSocket(socket);
+  chatSocket(socket);
+
+  socket.broadcast.emit("UserConnectedActionBroadcastAction", {
+    data: socket.id
+  });
+});
 
 server.listen(3000, function () {
   console.log("Server listening on port 3000...");

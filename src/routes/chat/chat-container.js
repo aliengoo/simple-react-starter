@@ -39,15 +39,17 @@ class ChatContainer extends React.Component {
   componentWillMount() {
     var socket = getSocket();
 
-    socket.on("SendMessageAction:broadcast", (response) => {
+    socket.on("SendMessageActionBroadcastAction", (response) => {
       this.props.dispatch(SendMessageActionBroadcastAction.create(response.data));
     });
 
-    socket.on("UserConnectedAction:broadcast", (response) => {
+    // these broadcast events are not related to an action, but a side-effect
+    // of connecting to the websocket server
+    socket.on("UserConnectedActionBroadcastAction", (response) => {
       this.props.dispatch(UserConnectedActionBroadcastAction.create(response.data));
     });
 
-    socket.on("UserDisconnectedAction:broadcast", (response) => {
+    socket.on("UserDisconnectedActionBroadcastAction", (response) => {
       this.props.dispatch(UserDisconnectedActionBroadcastAction.create(response.data));
     });
   }
@@ -84,7 +86,7 @@ class ChatContainer extends React.Component {
             <ChatUsernames chatUsernames={chatUsernames} chatUsername={chatUsername} fetching={fetching}/>
 
             <div className="chat-content">
-              <ChatMessages chatMessages={chatMessages} fetching={fetching}/>
+              <ChatMessages chatMessages={chatMessages} fetching={fetching} chatUsername={chatUsername}/>
 
               <ChatInput sendMessage={(message) => dispatch(SendMessageAction.create(message))} fetching={fetching}/>
             </div>

@@ -10,12 +10,13 @@ export default class TodoInput extends React.Component {
   constructor() {
     super();
     this._resetFocus = this._resetFocus.bind(this);
+    this._stateChanged = this._stateChanged.bind(this);
   }
 
   componentDidMount() {
     let store = instance();
 
-    store.subscribe(this._stateChanged.bind(this));
+    store.subscribe(this._stateChanged);
   }
 
   _stateChanged() {

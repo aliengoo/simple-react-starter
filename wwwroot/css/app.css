@@ -31,8 +31,23 @@ body {
   -ms-flex: 6;
   flex: 6;
   min-height: 500px;
-  border: 1px solid navajowhite;
-  border-radius: 10px; }
+  border: 1px solid whitesmoke;
+  border-radius: 10px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-align-content: flex-end;
+  -ms-flex-line-pack: end;
+  align-content: flex-end; }
 
 .chat-usernames {
   -webkit-flex: 1;

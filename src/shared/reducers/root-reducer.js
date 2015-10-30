@@ -9,7 +9,6 @@ import chatUsernames from '../../routes/chat/reducers/chat-usernames-reducer';
 import chatUsername from '../../routes/chat/reducers/chat-username-reducer';
 import chatMessages from '../../routes/chat/reducers/chat-messages-reducer';
 
-
 // todo container
 import todos from '../../routes/todo/reducers/todos-reducer';
 import todoItemText from '../../routes/todo/reducers/todo-item-text-reducer';

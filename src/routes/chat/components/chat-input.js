@@ -12,8 +12,9 @@ export default class ChatInput extends Component {
 
   _onKeyDown(e) {
     var val = this.refs.chatInput.value;
-    if (e.keyCode === 13 && (value || "").length > 0) {
-      this.props.sendMessage(value);
+
+    if (e.keyCode === 13 && (val || "").length > 0) {
+      this.props.sendMessage(val);
     }
   }
 

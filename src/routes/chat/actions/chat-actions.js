@@ -12,6 +12,8 @@ const SendMessageActionBroadcastAction = SyncActionCreator("SendMessageActionBro
 // when a new user connects
 const UserConnectedActionBroadcastAction = SyncActionCreator("UserConnectedActionBroadcastAction");
 
+const SetUsernameAction = SyncActionCreator("SetUsernameAction");
+
 // when a user disconnects
 const UserDisconnectedActionBroadcastAction = SyncActionCreator("UserDisconnectedActionBroadcastAction");
 
@@ -19,6 +21,7 @@ export default {
   SendMessageAction,
   SendMessageActionBroadcastAction,
   UserConnectedActionBroadcastAction,
-  UserDisconnectedActionBroadcastAction
+  UserDisconnectedActionBroadcastAction,
+  SetUsernameAction
 };
 
