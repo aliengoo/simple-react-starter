@@ -2,7 +2,9 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {getSocket, getSessionId} from '../socket';
+
+import {getSocket} from '../../../shared/socket';
+
 
 // shared components
 import NavBar from '../../../shared/nav-bar';
@@ -18,19 +20,33 @@ import Col from '../../../shared/layout/col';
 import Row from '../../../shared/layout/row';
 
 // actions
-import FindAllTodosAction from '../actions/find-all-todos-action';
-import AddTodoAction from '../actions/add-todo-action';
-import CompleteTodoAction from '../actions/complete-todo-action';
-import RemoveTodoAction from '../actions/remove-todo-action';
-import TodoItemTextChangedAction from '../actions/todo-item-text-changed-action';
-import UncompleteTodoAction from '../actions/uncomplete-todo-action';
-import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
-import UpdateTodoStartedAction from '../actions/update-todo-started-action';
-import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
-import UpdateTodoBeingEditedTextAction from '../actions/update-todo-being-edited-text-action';
-import SocketUpdateTodoAction from '../actions/socket-update-todo-action';
-import SocketNewTodoAction from '../actions/socket-new-todo-action';
-import SocketDeleteTodoAction from '../actions/socket-delete-todo-action';
+import AsyncActions from '../actions/async-actions';
+import SyncActions from '../actions/sync-actions';
+import BroadcastActions from '../actions/broadcast-actions';
+
+const {
+  AddTodoAction,
+  CompleteTodoAction,
+  UncompleteTodoAction,
+  RemoveTodoAction,
+  UpdateTodoCommitAction,
+  GetAllTodosAction,
+  } = AsyncActions;
+
+const {
+  UpdateTodoStartedAction,
+  UpdateTodoAbortedAction,
+  UpdateTodoBeingEditedTextAction,
+  TodoItemTextChangedAction,
+  } = SyncActions;
+
+const {
+  AddTodoActionBroadcastAction,
+  UpdateTodoCommitActionBroadcastAction,
+  RemoveTodoActionBroadcastAction
+  } = BroadcastActions;
+
+// actions
 
 class TodoContainer extends React.Component {
 
@@ -41,31 +57,14 @@ class TodoContainer extends React.Component {
   componentWillMount() {
     var socket = getSocket();
 
-    const {dispatch} = this.props;
-
-    socket.on('todoUpdated', (data) => {
-      if (data.sessionId !== getSessionId()) {
-        dispatch(SocketUpdateTodoAction.create(data.todo));
-      }
-    });
-
-    socket.on('todoAdded', (data) => {
-      if (data.sessionId !== getSessionId()) {
-        dispatch(SocketNewTodoAction.create(data.todo));
-      }
-    });
-
-    socket.on('todoDeleted', (data) => {
-      if (data.sessionId !== getSessionId()) {
-        dispatch(SocketDeleteTodoAction.create(data.id));
-      }
-    });
+    socket.on("AddTodoAction:broadcast", AddTodoActionBroadcastAction.create);
+    socket.on("UpdateTodoCommitAction:broadcast", UpdateTodoCommitActionBroadcastAction.create);
+    socket.on("RemoveTodoAction:broadcast", RemoveTodoActionBroadcastAction.create);
   }
-
 
   componentDidMount() {
     // when the container, or "smart" component loads, find all the todos
-    this.props.dispatch(FindAllTodosAction.findAllTodos());
+    this.props.dispatch(GetAllTodosAction.create({}));
   }
 
   render() {
@@ -101,7 +100,9 @@ class TodoContainer extends React.Component {
             <TodoInput
               todoBeingEdited={todoBeingEdited}
               onChange={(e) => dispatch(TodoItemTextChangedAction.create(e.target.value))}
-              addTodoClick={() => dispatch(AddTodoAction.create(todoItemText))}
+              addTodoClick={() => dispatch(AddTodoAction.create({
+                text: todoItemText
+              }))}
               inProgress={inProgress}
               todoItemText={todoItemText}/>
           </Col>

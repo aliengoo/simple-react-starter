@@ -5,7 +5,6 @@ window._ = require('lodash');
 require('bootstrap');
 require('parsleyjs');
 
-import {getSocket} from './routes/todo/socket';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

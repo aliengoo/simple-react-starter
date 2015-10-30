@@ -4,9 +4,9 @@ import Q from 'q';
 
 import AsyncStatus from '../../../shared/async-status';
 import {createHandlers} from '../../../shared/async-status-handlers';
-import {getSocket} from '../todo-socket-handler';
+import {getSocket} from '../../../shared/socket';
 
-var socket = getSocket();
+
 
 export default function creator(type) {
   return function() {
@@ -14,10 +14,12 @@ export default function creator(type) {
       create: (data) => createEmit(type, data),
       type
     };
-  }
+  };
 }
 
 function createEmit(type, data) {
+  var socket = getSocket();
+
   return dispatch => {
 
     const {fetching, complete, failed} = createHandlers(type);

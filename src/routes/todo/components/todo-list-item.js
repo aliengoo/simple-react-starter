@@ -4,8 +4,6 @@ import React, {Component, PropTypes} from 'react';
 import TodoListItemControls from './todo-list-item-controls';
 import $ from 'jquery';
 
-import {getSocket} from '../socket';
-
 import instance from '../store/todo-store';
 
 export default class TodoListItem extends Component {

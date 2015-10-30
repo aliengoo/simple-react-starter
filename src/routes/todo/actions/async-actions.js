@@ -15,8 +15,11 @@ const RemoveTodoAction = AsyncActionCreator("RemoveTodoAction");
 const UpdateTodoCommitAction = AsyncActionCreator("UpdateTodoCommitAction");
 // data {}
 const GetAllTodosAction = AsyncActionCreator("GetAllTodosAction");
+// data {id}
+const GetTodoAction = SyncActionCreator("GetTodoAction");
 
 export default {
+  GetTodoAction,
   AddTodoAction,
   CompleteTodoAction,
   UncompleteTodoAction,

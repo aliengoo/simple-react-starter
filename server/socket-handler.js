@@ -7,25 +7,25 @@ module.export = function (io) {
 
     // add todo
     socket.on('AddTodoAction', function (request, callback) {
-      var todo = new Todo(request.todo);
+      var todo = new Todo(request.data.todo);
 
       todo.save(function (err) {
         if (!err) {
           socket.broadcast.emit("AddTodoAction:broadcast", {
-            todo: todo
+            data: todo
           });
         }
 
         callback({
-          todo: todo
+          data: todo
         });
       });
     });
 
     // get all todos
-    socket.on('getAllTodos', function () {
+    socket.on('GetAllTodosAction', function (request, callback) {
       Todo.find().exec(function (err, todos) {
-        socket.emit('getAllTodos:result', {
+        callback({
           err: err,
           data: todos
         });
@@ -33,45 +33,43 @@ module.export = function (io) {
     });
 
 
-    socket.on('getTodo', function (request) {
+    socket.on('GetTodoAction', function (request, callback) {
       Todo.findById({
-        _id: request.id
+        _id: request.data.id
       }, function (err, todo) {
-        socket.emit('getTodo:result', {
+        callback({
           err: err,
-          todo: todo
+          data: todo
         });
       });
     });
 
 
     // updates
-    socket.on('updateTodo', function (request) {
+    socket.on('UpdateTodoCommitAction', function (request, callback) {
       Todo.findOneAndUpdate({
-        _id: request.todo.id
-      }, request.todo, {
+        _id: request.data._id
+      }, request.data, {
         'new': true,
         upsert: true
       }, function (err, updatedTodo) {
-
-        // back to sender
-        socket.emit('updateTodo:result', {
+        if (!err) {
+          socket.broadcast.emit("UpdateTodoCommitAction:broadcast", {
+            data: updatedTodo
+          });
+        }
+        callback({
           err: err,
-          todo: updatedTodo
-        });
-
-        // notify everyone but sender
-        socket.broadcast.emit("updateTodo:notify", {
-          todo: updatedTodo
+          data: updateTodo
         });
       });
     });
 
     // complete todo
 
-    socket.on('completeTodo', function (request) {
+    socket.on('CompleteTodoAction', function (request, callback) {
       Todo.findOneAndUpdate({
-        _id: request.todo.id
+        _id: request.data.id
       }, {
         $set: {
           completed: true
@@ -81,23 +79,23 @@ module.export = function (io) {
         upsert: false
       }, function (err, updatedTodo) {
 
-        socket.emit('completeTodo:result', {
+        callback({
           err: err,
-          todo: updatedTodo
+          data: updatedTodo
         });
 
         if (!err) {
-          socket.broadcast.emit("completeTodo:notify", {
-            todo: updatedTodo
+          socket.broadcast.emit("CompleteTodoAction:broadcast", {
+            data: updatedTodo
           });
         }
       });
     });
 
     // uncomplete todo
-    socket.on('uncompleteTodo', function (request) {
+    socket.on('UncompleteTodoAction', function (request, callback) {
       Todo.findOneAndUpdate({
-        _id: request.todo.id
+        _id: request.data.id
       }, {
         $set: {
           completed: false
@@ -107,32 +105,31 @@ module.export = function (io) {
         upsert: false
       }, function (err, updatedTodo) {
 
-        socket.emit('uncompleteTodo:result', {
+        callback({
           err: err,
-          todo: updatedTodo
+          data: updatedTodo
         });
 
         if (!err) {
-          socket.broadcast.emit("uncompleteTodo:notify", {
-            todo: updatedTodo
+          socket.broadcast.emit("UncompleteTodoAction:broadcast", {
+            data: updatedTodo
           });
         }
       });
     });
 
 
-
     // remove todo
-    socket.on('removeTodo', function (request) {
-      Todo.remove({_id: request.id}, function (err) {
-        socket.emit("removeTodo:result", {
+    socket.on('RemoveTodoAction', function (request, callback) {
+      Todo.remove({_id: request.data.id}, function (err) {
+        callback({
           err: err,
-          id: req.params.id
+          data: request.id
         });
 
         if (!err) {
-          socket.broadcast.emit('removeTodo:notify', {
-            id: request.id
+          socket.broadcast.emit('RemoveTodoAction:broadcast', {
+            data: request.id
           });
         }
       });

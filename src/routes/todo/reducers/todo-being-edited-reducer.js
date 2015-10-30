@@ -1,23 +1,18 @@
 "use strict";
 
-import AsyncStatus from '../../../shared/async-status';
+import SyncActions from '../actions/sync-actions';
 
-import UpdateTodoBeingEditedTextAction from '../actions/update-todo-being-edited-text-action';
-import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
-import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
-import UpdateTodoStartedAction from '../actions/update-todo-started-action';
+const {UpdateTodoStartedAction, UpdateTodoCommitAction, UpdateTodoAbortedAction, UpdateTodoBeingEditedTextAction} = SyncActions;
 
 export default function todoBeingEditedReducer(todoBeingEdited = null, action) {
   var newState = todoBeingEdited;
   switch (action.type) {
     case UpdateTodoStartedAction.type:
-      console.log("prior state:", todoBeingEdited);
-      newState = Object.assign({}, action.todoBeingEdited);
-      console.log("new state:", newState);
+      newState = Object.assign({}, action.data);
       break;
     case UpdateTodoBeingEditedTextAction.type:
       newState = Object.assign({}, todoBeingEdited, {
-        text: action.newText
+        text: action.data
       });
       break;
     case UpdateTodoAbortedAction.type:
@@ -25,8 +20,6 @@ export default function todoBeingEditedReducer(todoBeingEdited = null, action) {
       newState = null;
       break;
   }
-
-
 
   return newState;
 }

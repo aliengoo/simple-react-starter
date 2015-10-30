@@ -1,33 +1,39 @@
 "use strict";
 
 import AsyncStatus from '../../../shared/async-status';
-
-import AddTodoAction from '../actions/add-todo-action';
-import CompleteTodoAction from '../actions/complete-todo-action';
-import UncompleteTodoAction from '../actions/uncomplete-todo-action';
-import RemoveTodoAction from '../actions/remove-todo-action';
-import GetAllTodosAction from '../actions/get-all-todos-action';
-import UpdateTodoStartedAction from '../actions/update-todo-started-action';
-import UpdateTodoCommitAction from '../actions/update-todo-commit-action';
-import UpdateTodoAbortedAction from '../actions/update-todo-aborted-action';
-import SocketUpdateTodoAction from '../actions/socket-update-todo-action';
-import AddTodoNotificationAction from '../actions/add-todo-notification-action';
-import SocketDeleteTodoAction from '../actions/socket-delete-todo-action';
+import AsyncActions from '../actions/async-actions';
+import SyncActions from '../actions/sync-actions';
+import BroadcastActions from '../actions/broadcast-actions';
 
 import _ from 'lodash';
 
-function addTodoReducer(todos, action) {
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    return [action.todo, ...todos];
-  }
+const {
+  AddTodoAction,
+  CompleteTodoAction,
+  UncompleteTodoAction,
+  RemoveTodoAction,
+  UpdateTodoCommitAction,
+  GetAllTodosAction
+  } = AsyncActions;
 
-  return todos;
+const {
+  UpdateTodoAbortedAction,
+  } = SyncActions;
+
+const {
+  AddTodoActionBroadcastAction,
+  UpdateTodoCommitActionBroadcastAction,
+  RemoveTodoActionBroadcastAction
+  } = BroadcastActions;
+
+function addTodoActionReducer(todos, action) {
+  return action._asyncStatus === AsyncStatus.COMPLETE ? [action.todo, ...todos] : todos;
 }
 
-function completeTodoReducer(todos, action) {
+function completeTodoActionReducer(todos, action) {
 
   if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data);
 
     return [
       ...todos.slice(0, indexOfTodo),
@@ -41,9 +47,9 @@ function completeTodoReducer(todos, action) {
   return todos;
 }
 
-function uncompleteTodoReducer(todos, action) {
+function uncompleteTodoActionReducer(todos, action) {
   if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data);
 
     return [
       ...todos.slice(0, indexOfTodo),
@@ -58,28 +64,20 @@ function uncompleteTodoReducer(todos, action) {
 }
 
 
-function removeTodoReducer(todos, action) {
-
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.id);
-
-    return [
-      ...todos.slice(0, indexOfTodo),
-      ...todos.slice(indexOfTodo + 1)
-    ];
-  }
-
-  return todos;
+function removeTodoActionReducer(todos, action) {
+  return action._asyncStatus === AsyncStatus.COMPLETE ?
+    [..._.filter(todos, (todo) => todo._id !== action.data)] :
+    todos;
 }
 
-function findAllTodosReducer(todos = [], action) {
+function getAllTodosActionReducer(todos = [], action) {
   return action.todos || todos;
 }
 
-function updateTodoCommitReducer(todos = [], action) {
+function updateTodoCommitActionReducer(todos = [], action) {
 
   if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.updatedTodo._id);
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
       ...todos.slice(0, indexOfTodo),
@@ -91,13 +89,13 @@ function updateTodoCommitReducer(todos = [], action) {
   return todos;
 }
 
-function updateTodoAbortReducer(todos = [], action) {
+function updateTodoAbortedActionReducer(todos = [], action) {
   if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.todoBeingEditedPriorState._id);
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
       ...todos.slice(0, indexOfTodo),
-      action.todoBeingEditedPriorState,
+      action.data,
       ...todos.slice(indexOfTodo + 1)
     ];
   }
@@ -106,26 +104,26 @@ function updateTodoAbortReducer(todos = [], action) {
 }
 
 // handlers for web socket updates
-function socketUpdateTodoReducer(todos = [], action) {
+function updateTodoCommitActionBroadcastActionReducer(todos = [], action) {
 
-  let indexOfTodo = _.findIndex(todos, (item) => item._id === action.todo._id);
+  let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
   return [
     ...todos.slice(0, indexOfTodo),
-    action.todo,
+    action.data,
     ...todos.slice(indexOfTodo + 1)
   ];
 }
 
-function addTodoNotificationReducer(todos = [], action) {
+function addTodoActionBroadcastActionReducer(todos = [], action) {
   return [
-    action.todo,
+    action.data,
     ...todos
   ];
 }
 
-function socketDeleteTodoReducer(todos = [], action) {
-  return [..._.filter(todos, (item) => item._id !== action.id)];
+function removeTodoActionBroadcastActionReducer(todos = [], action) {
+  return [..._.filter(todos, (item) => item._id !== action.data)];
 }
 
 /**
@@ -138,25 +136,25 @@ export default function todos(todos = [], action) {
 
   switch (action.type) {
     case AddTodoAction.type:
-      return addTodoReducer(todos, action);
+      return addTodoActionReducer(todos, action);
     case CompleteTodoAction.type:
-      return completeTodoReducer(todos, action);
+      return completeTodoActionReducer(todos, action);
     case UncompleteTodoAction.type:
-      return uncompleteTodoReducer(todos, action);
+      return uncompleteTodoActionReducer(todos, action);
     case RemoveTodoAction.type:
-      return removeTodoReducer(todos, action);
+      return removeTodoActionReducer(todos, action);
     case GetAllTodosAction.type:
-      return findAllTodosReducer(todos, action);
+      return getAllTodosActionReducer(todos, action);
     case UpdateTodoCommitAction.type:
-      return updateTodoCommitReducer(todos, action);
+      return updateTodoCommitActionReducer(todos, action);
     case UpdateTodoAbortedAction.type:
-      return updateTodoAbortReducer(todos, action);
-    case SocketUpdateTodoAction.type:
-      return socketUpdateTodoReducer(todos, action);
-    case SocketDeleteTodoAction.type:
-      return socketDeleteTodoReducer(todos, action);
-    case AddTodoNotificationAction.type:
-      return addTodoNotificationReducer(todos, action);
+      return updateTodoAbortedActionReducer(todos, action);
+    case UpdateTodoCommitActionBroadcastAction.type:
+      return updateTodoCommitActionBroadcastActionReducer(todos, action);
+    case RemoveTodoActionBroadcastAction.type:
+      return removeTodoActionBroadcastActionReducer(todos, action);
+    case AddTodoActionBroadcastAction.type:
+      return addTodoActionBroadcastActionReducer(todos, action);
     default:
       return todos;
   }
