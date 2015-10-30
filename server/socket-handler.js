@@ -5,6 +5,23 @@ var Todo = require('./todo');
 module.export = function (io) {
   io.sockets.on('connection', function (socket) {
 
+    // add todo
+    socket.on('AddTodoAction', function (request, callback) {
+      var todo = new Todo(request.todo);
+
+      todo.save(function (err) {
+        if (!err) {
+          socket.broadcast.emit("AddTodoAction:broadcast", {
+            todo: todo
+          });
+        }
+
+        callback({
+          todo: todo
+        });
+      });
+    });
+
     // get all todos
     socket.on('getAllTodos', function () {
       Todo.find().exec(function (err, todos) {
@@ -103,24 +120,7 @@ module.export = function (io) {
       });
     });
 
-    // add todo
-    socket.on('addTodo', function (request) {
-      var todo = new Todo(request.todo);
 
-      todo.save(function (err) {
-        socket.emit('addTodo:result', {
-          err: err,
-          todo: todo
-        });
-
-
-        if (!err) {
-          socket.broadcast.emit("addTodo:notify", {
-            todo: todo
-          });
-        }
-      });
-    });
 
     // remove todo
     socket.on('removeTodo', function (request) {
