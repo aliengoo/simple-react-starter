@@ -58,6 +58,7 @@ module.exports = function init(io) {
     // updates
     socket.on('UpdateTodoCommitAction', function (request, callback) {
       console.log("UpdateTodoCommitAction", request);
+
       Todo.findOneAndUpdate({
         _id: request.data._id
       }, request.data, {

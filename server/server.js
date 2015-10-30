@@ -2,16 +2,13 @@
 
 var express = require("express")
   , bodyParser = require('body-parser')
-  , cors = require('cors'),
-  delay = require('express-delay');
-
+  , cors = require('cors');
 
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-
-//app.use(delay(1000));
+app.use(express.static("../wwwroot"));
 app.use(bodyParser.json());
 app.use(cors());
 

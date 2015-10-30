@@ -79,16 +79,10 @@ gulp.task('app:css', function () {
     .pipe(glp.livereload());
 });
 
-gulp.task('default', ['vendor:icons', 'vendor:css', 'app:css', 'browserify', 'webserver'], function () {
+
+gulp.task('default', ['vendor:icons', 'vendor:css', 'app:css', 'browserify'], function () {
   glp.livereload.listen();
 
   gulp.watch('./src/**/*.js', ['browserify']);
   gulp.watch('./src/**/*.scss', ['app:css']);
-});
-
-gulp.task('webserver', function () {
-  return gulp.src('wwwroot').pipe(glp.webserver({
-    port:9190,
-    livereload: true
-  }));
 });
