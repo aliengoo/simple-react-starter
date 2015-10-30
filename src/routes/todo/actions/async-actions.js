@@ -16,7 +16,7 @@ const UpdateTodoCommitAction = AsyncActionCreator("UpdateTodoCommitAction");
 // data {}
 const GetAllTodosAction = AsyncActionCreator("GetAllTodosAction");
 // data {id}
-const GetTodoAction = SyncActionCreator("GetTodoAction");
+const GetTodoAction = AsyncActionCreator("GetTodoAction");
 
 export default {
   GetTodoAction,

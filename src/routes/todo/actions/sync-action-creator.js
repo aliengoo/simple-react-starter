@@ -10,14 +10,14 @@
  *  dispatch(ActionNameAction(data));
  */
 export default function creator(type) {
-  return function() {
-    return {
-      create: (data) => {
-        return {
-          type,
-          data
-        };
-      }
-    };
+  return {
+    type,
+    create: (data) => {
+      return {
+        type,
+        data
+      };
+    }
   };
+
 };

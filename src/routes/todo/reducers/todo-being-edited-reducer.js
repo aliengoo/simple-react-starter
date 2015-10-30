@@ -1,19 +1,35 @@
 "use strict";
 
+import _ from 'lodash';
 import SyncActions from '../actions/sync-actions';
+import AsyncActions from '../actions/async-actions';
 
-const {UpdateTodoStartedAction, UpdateTodoCommitAction, UpdateTodoAbortedAction, UpdateTodoBeingEditedTextAction} = SyncActions;
+const {
+  UpdateTodoStartedAction,
+
+  UpdateTodoAbortedAction,
+  UpdateTodoBeingEditedTextAction} = SyncActions;
+
+const {UpdateTodoCommitAction} = AsyncActions;
 
 export default function todoBeingEditedReducer(todoBeingEdited = null, action) {
   var newState = todoBeingEdited;
   switch (action.type) {
     case UpdateTodoStartedAction.type:
-      newState = Object.assign({}, action.data);
+
+      if (_.isObject(action.data)) {
+        newState = Object.assign({}, action.data);
+      }
+
       break;
     case UpdateTodoBeingEditedTextAction.type:
-      newState = Object.assign({}, todoBeingEdited, {
-        text: action.data
-      });
+
+      if (_.isString(action.data)) {
+        newState = Object.assign({}, todoBeingEdited, {
+          text: action.data
+        });
+      }
+
       break;
     case UpdateTodoAbortedAction.type:
     case UpdateTodoCommitAction.type:

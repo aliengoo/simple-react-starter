@@ -7,16 +7,19 @@ import {createHandlers} from '../../../shared/async-status-handlers';
 import {getSocket} from '../../../shared/socket';
 
 
-
 export default function creator(type) {
-  return function() {
-    return {
-      create: (data) => createEmit(type, data),
-      type
-    };
+  return {
+    create: (data) => createEmit(type, data),
+    type
   };
 }
 
+/**
+ * Emits the socket event with data
+ * @param type - the type of action
+ * @param data - the data.  The data is a property of the request passed to the socket, e.g. {data: data}
+ * @returns {Function}
+ */
 function createEmit(type, data) {
   var socket = getSocket();
 
@@ -28,13 +31,17 @@ function createEmit(type, data) {
 
     var defer = Q.defer();
 
-    socket.emit(type, data, (response) => {
+    socket.emit(type, {
+      data
+    }, (response) => {
       // both resolve, even if there is an error
       if (response.err) {
-        defer.resolve(failed(response));
+        dispatch(failed(response.err));
       } else {
-        defer.resolve(complete(response));
+        dispatch(complete(response.data));
       }
+
+      defer.resolve();
     });
 
     return defer.promise;

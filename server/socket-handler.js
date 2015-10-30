@@ -2,12 +2,19 @@
 
 var Todo = require('./todo');
 
-module.export = function (io) {
+module.exports = function init(io) {
+
+  io.on('error', function (err) {
+    console.log(err);
+  });
+
   io.sockets.on('connection', function (socket) {
+    console.log("connected:" + socket.id);
 
     // add todo
     socket.on('AddTodoAction', function (request, callback) {
-      var todo = new Todo(request.data.todo);
+      console.log("AddTodoAction", request);
+      var todo = new Todo(request.data);
 
       todo.save(function (err) {
         if (!err) {
@@ -24,7 +31,9 @@ module.export = function (io) {
 
     // get all todos
     socket.on('GetAllTodosAction', function (request, callback) {
+      console.log("GetAllTodosAction", request);
       Todo.find().exec(function (err, todos) {
+        console.log(todos);
         callback({
           err: err,
           data: todos
@@ -34,6 +43,7 @@ module.export = function (io) {
 
 
     socket.on('GetTodoAction', function (request, callback) {
+      console.log("GetTodoAction", request);
       Todo.findById({
         _id: request.data.id
       }, function (err, todo) {
@@ -47,6 +57,7 @@ module.export = function (io) {
 
     // updates
     socket.on('UpdateTodoCommitAction', function (request, callback) {
+      console.log("UpdateTodoCommitAction", request);
       Todo.findOneAndUpdate({
         _id: request.data._id
       }, request.data, {
@@ -68,8 +79,9 @@ module.export = function (io) {
     // complete todo
 
     socket.on('CompleteTodoAction', function (request, callback) {
+      console.log("CompleteTodoAction", request);
       Todo.findOneAndUpdate({
-        _id: request.data.id
+        _id: request.data
       }, {
         $set: {
           completed: true
@@ -78,6 +90,8 @@ module.export = function (io) {
         'new': true,
         upsert: false
       }, function (err, updatedTodo) {
+
+        console.log("CompleteTodoAction");
 
         callback({
           err: err,
@@ -94,8 +108,9 @@ module.export = function (io) {
 
     // uncomplete todo
     socket.on('UncompleteTodoAction', function (request, callback) {
+      console.log("UncompleteTodoAction", request);
       Todo.findOneAndUpdate({
-        _id: request.data.id
+        _id: request.data
       }, {
         $set: {
           completed: false
@@ -121,15 +136,16 @@ module.export = function (io) {
 
     // remove todo
     socket.on('RemoveTodoAction', function (request, callback) {
-      Todo.remove({_id: request.data.id}, function (err) {
+      console.log("RemoveTodoAction", request);
+      Todo.remove({_id: request.data}, function (err) {
         callback({
           err: err,
-          data: request.id
+          data: request.data
         });
 
         if (!err) {
           socket.broadcast.emit('RemoveTodoAction:broadcast', {
-            data: request.id
+            data: request.data
           });
         }
       });

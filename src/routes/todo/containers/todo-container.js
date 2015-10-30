@@ -43,7 +43,9 @@ const {
 const {
   AddTodoActionBroadcastAction,
   UpdateTodoCommitActionBroadcastAction,
-  RemoveTodoActionBroadcastAction
+  RemoveTodoActionBroadcastAction,
+  CompleteTodoActionBroadcastAction,
+  UncompleteTodoActionBroadcastAction
   } = BroadcastActions;
 
 // actions
@@ -57,9 +59,25 @@ class TodoContainer extends React.Component {
   componentWillMount() {
     var socket = getSocket();
 
-    socket.on("AddTodoAction:broadcast", AddTodoActionBroadcastAction.create);
-    socket.on("UpdateTodoCommitAction:broadcast", UpdateTodoCommitActionBroadcastAction.create);
-    socket.on("RemoveTodoAction:broadcast", RemoveTodoActionBroadcastAction.create);
+    socket.on("AddTodoAction:broadcast", (response) => {
+      this.props.dispatch(AddTodoActionBroadcastAction.create(response.data));
+    });
+
+    socket.on("UpdateTodoCommitAction:broadcast", (response) => {
+     this.props.dispatch(UpdateTodoCommitActionBroadcastAction.create(response.data));
+    });
+
+    socket.on("RemoveTodoAction:broadcast", (response) => {
+      this.props.dispatch(RemoveTodoActionBroadcastAction.create(response.data));
+    });
+
+    socket.on("CompleteTodoAction:broadcast", (response) => {
+      this.props.dispatch(CompleteTodoActionBroadcastAction.create(response.data));
+    });
+
+    socket.on("UncompleteTodoAction:broadcast", (response) => {
+      this.props.dispatch(UncompleteTodoActionBroadcastAction.create(response.data));
+    });
   }
 
   componentDidMount() {

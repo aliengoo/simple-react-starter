@@ -23,22 +23,25 @@ const {
 const {
   AddTodoActionBroadcastAction,
   UpdateTodoCommitActionBroadcastAction,
-  RemoveTodoActionBroadcastAction
+  RemoveTodoActionBroadcastAction,
+  CompleteTodoActionBroadcastAction,
+  UncompleteTodoActionBroadcastAction
   } = BroadcastActions;
 
 function addTodoActionReducer(todos, action) {
-  return action._asyncStatus === AsyncStatus.COMPLETE ? [action.todo, ...todos] : todos;
+  return _.isObject(action.data) && action._asyncStatus === AsyncStatus.COMPLETE ?
+    [action.data, ...todos] :
+    todos;
 }
 
-function completeTodoActionReducer(todos, action) {
-
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data);
+function completeChangedTodoActionReducer(todos, action) {
+  if (_.isObject(action.data) && action._asyncStatus === AsyncStatus.COMPLETE) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
       ...todos.slice(0, indexOfTodo),
       Object.assign({}, todos[indexOfTodo], {
-        completed: true
+        completed: action.data.completed
       }),
       ...todos.slice(indexOfTodo + 1)
     ];
@@ -47,14 +50,14 @@ function completeTodoActionReducer(todos, action) {
   return todos;
 }
 
-function uncompleteTodoActionReducer(todos, action) {
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
-    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data);
+function completeChangedTodoActionBroadcastActionReducer(todos, action) {
+  if (_.isObject(action.data)) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
       ...todos.slice(0, indexOfTodo),
       Object.assign({}, todos[indexOfTodo], {
-        completed: false
+        completed: action.data.completed
       }),
       ...todos.slice(indexOfTodo + 1)
     ];
@@ -62,26 +65,25 @@ function uncompleteTodoActionReducer(todos, action) {
 
   return todos;
 }
-
 
 function removeTodoActionReducer(todos, action) {
-  return action._asyncStatus === AsyncStatus.COMPLETE ?
+  return _.isString(action.data) && action._asyncStatus === AsyncStatus.COMPLETE ?
     [..._.filter(todos, (todo) => todo._id !== action.data)] :
     todos;
 }
 
 function getAllTodosActionReducer(todos = [], action) {
-  return action.todos || todos;
+  return _.isArray(action.data) ? action.data : todos;
 }
 
 function updateTodoCommitActionReducer(todos = [], action) {
 
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
+  if (_.isObject(action.data) && action._asyncStatus === AsyncStatus.COMPLETE) {
     let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
       ...todos.slice(0, indexOfTodo),
-      action.updatedTodo,
+      action.data,
       ...todos.slice(indexOfTodo + 1)
     ];
   }
@@ -90,7 +92,7 @@ function updateTodoCommitActionReducer(todos = [], action) {
 }
 
 function updateTodoAbortedActionReducer(todos = [], action) {
-  if (action._asyncStatus === AsyncStatus.COMPLETE) {
+  if (_.isObject(action.data) && action._asyncStatus === AsyncStatus.COMPLETE) {
     let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
     return [
@@ -106,24 +108,37 @@ function updateTodoAbortedActionReducer(todos = [], action) {
 // handlers for web socket updates
 function updateTodoCommitActionBroadcastActionReducer(todos = [], action) {
 
-  let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
+  if (_.isObject(action.data)) {
+    let indexOfTodo = _.findIndex(todos, (item) => item._id === action.data._id);
 
-  return [
-    ...todos.slice(0, indexOfTodo),
-    action.data,
-    ...todos.slice(indexOfTodo + 1)
-  ];
+    return [
+      ...todos.slice(0, indexOfTodo),
+      action.data,
+      ...todos.slice(indexOfTodo + 1)
+    ];
+  }
+
+  return todos;
 }
 
 function addTodoActionBroadcastActionReducer(todos = [], action) {
-  return [
-    action.data,
-    ...todos
-  ];
+  if (_.isObject(action.data)) {
+    return [
+      action.data,
+      ...todos
+    ];
+  }
+
+  return todos;
 }
 
 function removeTodoActionBroadcastActionReducer(todos = [], action) {
-  return [..._.filter(todos, (item) => item._id !== action.data)];
+
+  if (_.isString(action.data)) {
+    return [..._.filter(todos, (item) => item._id !== action.data)];
+  }
+
+  return todos;
 }
 
 /**
@@ -137,10 +152,13 @@ export default function todos(todos = [], action) {
   switch (action.type) {
     case AddTodoAction.type:
       return addTodoActionReducer(todos, action);
+
     case CompleteTodoAction.type:
-      return completeTodoActionReducer(todos, action);
     case UncompleteTodoAction.type:
-      return uncompleteTodoActionReducer(todos, action);
+      return completeChangedTodoActionReducer(todos, action);
+    case CompleteTodoActionBroadcastAction.type:
+    case UncompleteTodoActionBroadcastAction.type:
+      return completeChangedTodoActionBroadcastActionReducer(todos, action);
     case RemoveTodoAction.type:
       return removeTodoActionReducer(todos, action);
     case GetAllTodosAction.type:

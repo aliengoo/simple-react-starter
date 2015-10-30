@@ -1,5 +1,6 @@
 "use strict";
 
+import _ from 'lodash';
 import AsyncStatus from '../../../shared/async-status';
 
 export default function todoItemText(text = "", action) {
@@ -7,9 +8,13 @@ export default function todoItemText(text = "", action) {
     return "";
   }
 
-  if (action.text === undefined) {
+  if (_.isUndefined(action.data)) {
     return text;
-  } else {
-    return action.text;
   }
+
+  if (_.isString(action.data)) {
+    return action.data;
+  }
+
+  return text;
 }

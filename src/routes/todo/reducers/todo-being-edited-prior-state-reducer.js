@@ -1,9 +1,14 @@
 "use strict";
 
+import _ from 'lodash';
+
 import AsyncStatus from '../../../shared/async-status';
 import SyncActions from '../actions/sync-actions';
+import AsyncActions from '../actions/async-actions';
 
-const {UpdateTodoStartedAction, UpdateTodoCommitAction, UpdateTodoAbortedAction} = SyncActions;
+const {UpdateTodoStartedAction, UpdateTodoAbortedAction} = SyncActions;
+const {UpdateTodoCommitAction} = AsyncActions;
+
 
 /**
  * When a user starts editing a todo, the previous state is stored is the operation is aborted
@@ -14,9 +19,12 @@ const {UpdateTodoStartedAction, UpdateTodoCommitAction, UpdateTodoAbortedAction}
 export default function todoBeingEditedPriorStateReducer(todoBeingEditedPriorState = null, action) {
 
   var newState = todoBeingEditedPriorState;
-  switch(action.type) {
+
+  switch (action.type) {
     case UpdateTodoStartedAction.type:
-      newState = Object.assign({}, action.data);
+      if (_.isObject(action.data)) {
+        newState = Object.assign({}, action.data);
+      }
       break;
     case UpdateTodoAbortedAction.type:
     case UpdateTodoCommitAction.type:
