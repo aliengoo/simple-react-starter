@@ -71,7 +71,7 @@ module.exports = function init(io) {
         }
         callback({
           err: err,
-          data: updateTodo
+          data: updatedTodo
         });
       });
     });
