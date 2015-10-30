@@ -64,7 +64,7 @@ class TodoContainer extends React.Component {
     });
 
     socket.on("UpdateTodoCommitAction:broadcast", (response) => {
-     this.props.dispatch(UpdateTodoCommitActionBroadcastAction.create(response.data));
+      this.props.dispatch(UpdateTodoCommitActionBroadcastAction.create(response.data));
     });
 
     socket.on("RemoveTodoAction:broadcast", (response) => {
@@ -108,42 +108,45 @@ class TodoContainer extends React.Component {
     }
 
     return (
-      <Container>
-        <PageHeader>
-          Todo List
-        </PageHeader>
+      <div>
+        <NavBar appName="simple-react-starter"/>
+        <Container>
+          <PageHeader>
+            Todo List
+          </PageHeader>
 
-        <Row>
-          <Col media="sm" grid="12">
-            <TodoInput
-              todoBeingEdited={todoBeingEdited}
-              onChange={(e) => dispatch(TodoItemTextChangedAction.create(e.target.value))}
-              addTodoClick={() => dispatch(AddTodoAction.create({
+          <Row>
+            <Col media="sm" grid="12">
+              <TodoInput
+                todoBeingEdited={todoBeingEdited}
+                onChange={(e) => dispatch(TodoItemTextChangedAction.create(e.target.value))}
+                addTodoClick={() => dispatch(AddTodoAction.create({
                 text: todoItemText
               }))}
-              inProgress={inProgress}
-              todoItemText={todoItemText}/>
-          </Col>
-        </Row>
+                inProgress={inProgress}
+                todoItemText={todoItemText}/>
+            </Col>
+          </Row>
 
-        <Row>
-          <Col media="sm" grid="12">
-            <TodoList
-              todos={todos}
-              inProgress={inProgress}
-              activeTodoId={activeTodoId}
-              todoBeingEdited={todoBeingEdited}
-              updateTodoBeingEditedTextChanged={(newText) => dispatch(UpdateTodoBeingEditedTextAction.create(newText))}
-              updateTodoAbortedClick={() => dispatch(UpdateTodoAbortedAction.create(todoBeingEditedPriorState))}
-              updateTodoCommitClick={() => dispatch(UpdateTodoCommitAction.create(todoBeingEdited))}
-              updateTodoStartedClick={(todo) => dispatch(UpdateTodoStartedAction.create(todo))}
-              uncompleteTodoClick={(id) => dispatch(UncompleteTodoAction.create(id))}
-              removeTodoClick={(id) => dispatch(RemoveTodoAction.create(id))}
-              completeTodoClick={(id) => dispatch(CompleteTodoAction.create(id))}/>
-          </Col>
-        </Row>
-        {alertError}
-      </Container>
+          <Row>
+            <Col media="sm" grid="12">
+              <TodoList
+                todos={todos}
+                inProgress={inProgress}
+                activeTodoId={activeTodoId}
+                todoBeingEdited={todoBeingEdited}
+                updateTodoBeingEditedTextChanged={(newText) => dispatch(UpdateTodoBeingEditedTextAction.create(newText))}
+                updateTodoAbortedClick={() => dispatch(UpdateTodoAbortedAction.create(todoBeingEditedPriorState))}
+                updateTodoCommitClick={() => dispatch(UpdateTodoCommitAction.create(todoBeingEdited))}
+                updateTodoStartedClick={(todo) => dispatch(UpdateTodoStartedAction.create(todo))}
+                uncompleteTodoClick={(id) => dispatch(UncompleteTodoAction.create(id))}
+                removeTodoClick={(id) => dispatch(RemoveTodoAction.create(id))}
+                completeTodoClick={(id) => dispatch(CompleteTodoAction.create(id))}/>
+            </Col>
+          </Row>
+          {alertError}
+        </Container>
+      </div>
     );
   }
 }

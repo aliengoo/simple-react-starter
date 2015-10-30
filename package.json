@@ -46,7 +46,7 @@
     "events": "^1.1.0",
     "flux": "^2.1.1",
     "font-awesome": "^4.4.0",
-    "history": "^1.12.5",
+    "history": "^1.13.0",
     "immutable": "^3.7.5",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
