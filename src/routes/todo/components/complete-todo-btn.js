@@ -4,13 +4,13 @@ import React, {Component, PropTypes} from 'react';
 
 export default class CompleteTodoBtn extends Component {
   render() {
-    const {inProgress, completeTodoClick, todo, todoBeingEdited, activeTodoId} = this.props;
+    const {fetching, completeTodoClick, todo, todoBeingEdited, activeTodoId} = this.props;
 
     let klassName = `btn btn-success  btn-lg ${todo.completed || !!todoBeingEdited ? 'hide' : ''}`;
 
     let icon = <i className="fa fa-check"/>;
 
-    var todoInProgress = inProgress && activeTodoId === todo._id;
+    var todoInProgress = fetching && activeTodoId === todo._id;
 
     if (todoInProgress) {
       icon = <i className="fa fa-spinner fa-spin"/>;
@@ -28,7 +28,7 @@ export default class CompleteTodoBtn extends Component {
 
 CompleteTodoBtn.propTypes = {
   todoBeingEdited: PropTypes.object,
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   activeTodoId: PropTypes.string,
   completeTodoClick: PropTypes.func.isRequired,
   todo: PropTypes.object.isRequired

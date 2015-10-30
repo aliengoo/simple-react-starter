@@ -20,7 +20,7 @@ export default class TodoListItemControls extends Component {
       todoBeingEdited,
       removeTodoClick,
       todo,
-      inProgress,
+      fetching,
       activeTodoId} = this.props;
 
     return (
@@ -28,21 +28,21 @@ export default class TodoListItemControls extends Component {
         <div>
           <CompleteTodoBtn
             completeTodoClick={completeTodoClick}
-            inProgress={inProgress}
+            fetching={fetching}
             activeTodoId={activeTodoId}
             todoBeingEdited={todoBeingEdited}
             todo={todo}/>
 
           <UncompleteTodoBtn
             uncompleteTodoClick={uncompleteTodoClick}
-            inProgress={inProgress}
+            fetching={fetching}
             activeTodoId={activeTodoId}
             todoBeingEdited={todoBeingEdited}
             todo={todo}/>
 
           <RemoveTodoBtn
             removeTodoClick={removeTodoClick}
-            inProgress={inProgress}
+            fetching={fetching}
             activeTodoId={activeTodoId}
             todoBeingEdited={todoBeingEdited}
             todo={todo}/>
@@ -50,7 +50,7 @@ export default class TodoListItemControls extends Component {
 
           <UpdateTodoCommitBtn
             updateTodoCommitClick={updateTodoCommitClick}
-            inProgress={inProgress}
+            fetching={fetching}
             activeTodoId={activeTodoId}
             todo={todo}
             todoBeingEdited={todoBeingEdited}
@@ -58,7 +58,7 @@ export default class TodoListItemControls extends Component {
 
           <UpdateTodoAbortBtn
             updateTodoAbortedClick={updateTodoAbortedClick}
-            inProgress={inProgress}
+            fetching={fetching}
             activeTodoId={activeTodoId}
             todo={todo}
             todoBeingEdited={todoBeingEdited}
@@ -74,7 +74,7 @@ TodoListItemControls.propTypes = {
   todoBeingEdited: PropTypes.object,
   updateTodoCommitClick: PropTypes.func.isRequired,
   updateTodoAbortedClick: PropTypes.func.isRequired,
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   activeTodoId: PropTypes.string,
   completeTodoClick: PropTypes.func.isRequired,
   uncompleteTodoClick: PropTypes.func.isRequired,

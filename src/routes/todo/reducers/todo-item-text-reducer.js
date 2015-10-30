@@ -1,7 +1,7 @@
 "use strict";
 
 import _ from 'lodash';
-import AsyncStatus from '../../../shared/async-status';
+import AsyncStatus from '../../../shared/api/async-status';
 import SyncActions from '../actions/sync-actions';
 
 const {TodoItemTextChangedAction} = SyncActions;

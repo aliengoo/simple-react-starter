@@ -1,7 +1,6 @@
 "use strict";
 
-import SyncActionCreator from './sync-action-creator';
-
+import SyncActionCreator from '../../../shared/actions/sync-action-creator';
 
 const UpdateTodoStartedAction = SyncActionCreator("UpdateTodoStartedAction");
 const UpdateTodoBeingEditedTextAction = SyncActionCreator("UpdateTodoBeingEditedTextAction");

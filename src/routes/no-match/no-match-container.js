@@ -3,13 +3,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import NavBar from '../../../shared/nav-bar';
-import PageHeader from '../../../shared/page-header';
+import NavBar from '../../shared/components/nav-bar';
+import PageHeader from '../../shared/components/page-header';
 
-import ContainerFluid from '../../../shared/layout/container-fluid';
-import Container from '../../../shared/layout/container';
-import Col from '../../../shared/layout/col';
-import Row from '../../../shared/layout/row';
+import ContainerFluid from '../../shared/components/container-fluid';
+import Container from '../../shared/components/container';
+import Col from '../../shared/components/col';
+import Row from '../../shared/components/row';
 
 class NoMatchContainer extends Component {
 

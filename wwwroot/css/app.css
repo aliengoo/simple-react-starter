@@ -1,6 +1,43 @@
 /* inject:imports */
+.chat-parent {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row; }
+
+.chat-content {
+  -webkit-flex: 10;
+  -ms-flex: 10;
+  flex: 10;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column; }
+
 body {
   font-family: 'Fira Mono', sans-serif; }
+
+.chat-input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
+
+.chat-messages {
+  -webkit-flex: 6;
+  -ms-flex: 6;
+  flex: 6;
+  min-height: 500px;
+  border: 1px solid navajowhite;
+  border-radius: 10px; }
+
+.chat-usernames {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
 
 .todo-list-item {
   list-style: none;

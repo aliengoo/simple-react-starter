@@ -1,6 +1,6 @@
 "use strict";
 
-import AsyncStatus from '../../../shared/async-status';
+import AsyncStatus from '../../../shared/api/async-status';
 import AsyncActions from '../actions/async-actions';
 import SyncActions from '../actions/sync-actions';
 import BroadcastActions from '../actions/broadcast-actions';

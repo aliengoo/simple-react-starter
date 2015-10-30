@@ -1,6 +1,6 @@
 "use strict";
 
-import AsyncStatus from '../../../shared/async-status';
+import AsyncStatus from '../../../shared/api/async-status';
 import _ from 'lodash';
 
 export default function activeTodoId(id = "", action) {

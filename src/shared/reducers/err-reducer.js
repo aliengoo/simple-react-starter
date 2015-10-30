@@ -1,6 +1,6 @@
 "use strict";
 
-import AsyncStatus from '../../../shared/async-status';
+import AsyncStatus from '../api/async-status';
 
 export default function err(state = "", action) {
 

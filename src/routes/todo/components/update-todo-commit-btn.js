@@ -5,7 +5,7 @@ import React, {Component, PropTypes} from 'react';
 export default class UpdateTodoCommitBtn extends Component {
 
   render() {
-    const {inProgress, todoBeingEdited, updateTodoCommitClick, todo, activeTodoId} = this.props;
+    const {fetching, todoBeingEdited, updateTodoCommitClick, todo, activeTodoId} = this.props;
 
     var isBeingEdited = todoBeingEdited && todoBeingEdited._id === todo._id;
 
@@ -13,7 +13,7 @@ export default class UpdateTodoCommitBtn extends Component {
 
     let icon = <i className="fa fa-cloud-upload"/>;
 
-    var todoInProgress = inProgress && activeTodoId === todo._id;
+    var todoInProgress = fetching && activeTodoId === todo._id;
 
     if (todoInProgress) {
       icon = <i className="fa fa-spinner fa-spin"/>;
@@ -30,7 +30,7 @@ export default class UpdateTodoCommitBtn extends Component {
 }
 
 UpdateTodoCommitBtn.propTypes = {
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   activeTodoId: PropTypes.string,
   todo: PropTypes.object.isRequired,
   todoBeingEdited: PropTypes.object,

@@ -6,7 +6,7 @@ export default class UpdateTodoAbortBtn extends Component {
 
   render() {
     const {
-      inProgress,
+      fetching,
       updateTodoAbortedClick,
       todoBeingEdited,
       todo,
@@ -18,7 +18,7 @@ export default class UpdateTodoAbortBtn extends Component {
 
     let icon = <i className="fa fa-recycle"/>;
 
-    var todoInProgress = inProgress && activeTodoId === todo._id;
+    var todoInProgress = fetching && activeTodoId === todo._id;
 
     if (todoInProgress) {
       icon = <i className="fa fa-spinner fa-spin"/>;
@@ -35,7 +35,7 @@ export default class UpdateTodoAbortBtn extends Component {
 }
 
 UpdateTodoAbortBtn.propTypes = {
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   activeTodoId: PropTypes.string,
   todo: PropTypes.object.isRequired,
   todoBeingEdited: PropTypes.object,

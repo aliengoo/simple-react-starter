@@ -1,7 +1,7 @@
 "use strict";
 
-import AsyncStatus from '../../../shared/async-status';
-import AsyncActionCreator from './async-action-creator';
+import AsyncStatus from '../../../shared/api/async-status';
+import AsyncActionCreator from '../../../shared/actions/async-action-creator';
 
 // data {text}
 const AddTodoAction =  AsyncActionCreator("AddTodoAction");

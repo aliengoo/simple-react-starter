@@ -3,8 +3,7 @@
 import React, {Component, PropTypes} from 'react';
 import TodoListItemControls from './todo-list-item-controls';
 import $ from 'jquery';
-
-import instance from '../store/todo-store';
+import instance from '../../../shared/store/app-store';
 
 export default class TodoListItem extends Component {
 
@@ -68,7 +67,7 @@ export default class TodoListItem extends Component {
       todoBeingEdited,
       completeTodoClick,
       uncompleteTodoClick,
-      inProgress,
+      fetching,
       activeTodoId} = this.props;
 
     var task = <div onClick={this._enableEdit}>{todo.text}</div>;
@@ -100,7 +99,7 @@ export default class TodoListItem extends Component {
           removeTodoClick={removeTodoClick}
           todo={todo}
           todoBeingEdited={todoBeingEdited}
-          inProgress={inProgress}
+          fetching={fetching}
           activeTodoId={activeTodoId}
         />
       </div>
@@ -116,7 +115,7 @@ TodoListItem.propTypes = {
   updateTodoAbortedClick: PropTypes.func.isRequired,
   todo: PropTypes.object.isRequired,
   activeTodoId: PropTypes.string,
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   removeTodoClick: PropTypes.func.isRequired,
   completeTodoClick: PropTypes.func.isRequired,
   uncompleteTodoClick: PropTypes.func.isRequired

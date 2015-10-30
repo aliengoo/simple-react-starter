@@ -18,7 +18,7 @@ export default class TodoList extends Component {
       updateTodoStartedClick,
       updateTodoCommitClick,
       updateTodoAbortedClick,
-      inProgress,
+      fetching,
       activeTodoId} = this.props;
 
     var items = todos.map((todo, key) =>
@@ -32,7 +32,7 @@ export default class TodoList extends Component {
         removeTodoClick={removeTodoClick}
         completeTodoClick={completeTodoClick}
         uncompleteTodoClick={uncompleteTodoClick}
-        inProgress={inProgress}
+        fetching={fetching}
         todoBeingEdited={todoBeingEdited}
         activeTodoId={activeTodoId}/>));
 
@@ -57,6 +57,6 @@ TodoList.propTypes = {
   removeTodoClick: PropTypes.func.isRequired,
   completeTodoClick: PropTypes.func.isRequired,
   uncompleteTodoClick: PropTypes.func.isRequired,
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   activeTodoId: PropTypes.string
 };

@@ -2,9 +2,9 @@
 
 import Q from 'q';
 
-import AsyncStatus from '../../../shared/async-status';
-import {createHandlers} from '../../../shared/async-status-handlers';
-import {getSocket} from '../../../shared/socket';
+import AsyncStatus from '../api/async-status';
+import {createHandlers} from '../api/async-status-handlers';
+import {getSocket} from '../api/socket';
 
 
 export default function creator(type) {

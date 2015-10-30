@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import todos from './todos-reducer';
 import todoItemText from './todo-item-text-reducer';
-import inProgress from './in-progress-reducer';
+import fetching from '../../../shared/reducers/fetching-reducer';
 import activeTodoId from './active-todo-id-reducer';
 import err from './err-reducer';
 import todoBeingEditedPriorState from './todo-being-edited-prior-state-reducer';
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   todoBeingEditedPriorState,
   todoBeingEdited,
   todoItemText,
-  inProgress,
+  fetching,
   activeTodoId,
   err,
   todos

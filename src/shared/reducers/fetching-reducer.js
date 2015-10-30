@@ -1,7 +1,7 @@
 "use strict";
-import AsyncStatus from '../../../shared/async-status';
+import AsyncStatus from '../api/async-status';
 
-export default function inProgress(state = false, action) {
+export default function fetching(state = false, action) {
   if (action._asyncStatus === AsyncStatus.FETCHING) {
     return true;
   } else if (action._asyncStatus === AsyncStatus.FAILED) {

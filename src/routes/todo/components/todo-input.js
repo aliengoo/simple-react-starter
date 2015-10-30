@@ -1,21 +1,15 @@
 "use strict";
 
 import React, {Component, PropTypes} from 'react';
-import InputGroup from '../../../shared/input/input-group';
-import InputGroupBtn from '../../../shared/input/input-group-btn';
-import instance from '../store/todo-store';
+import InputGroup from '../../../shared/components/input-group';
+import InputGroupBtn from '../../../shared/components/input-group-btn';
+import instance from '../../../shared/store/app-store';
 
 export default class TodoInput extends React.Component {
 
   constructor() {
     super();
     this._resetFocus = this._resetFocus.bind(this);
-  }
-
-  componentWillUnmount() {
-    let store = instance();
-
-    store.unsubscribe(this._stateChanged.bind(this));
   }
 
   componentDidMount() {
@@ -56,11 +50,11 @@ export default class TodoInput extends React.Component {
   }
 
   render() {
-    const {onChange, inProgress, addTodoClick} = this.props;
+    const {onChange, fetching, addTodoClick} = this.props;
 
     var input = (<input
       name="todo-input"
-      disabled={inProgress}
+      disabled={fetching}
       type="text"
       onKeyDown={this._onKeyDown.bind(this)}
       onChange={onChange}
@@ -74,7 +68,7 @@ export default class TodoInput extends React.Component {
         <InputGroupBtn>
 
           <button
-            disabled={inProgress}
+            disabled={fetching}
             className="btn btn-primary btn-lg"
             type="button"
             onClick={addTodoClick}>Add
@@ -90,6 +84,6 @@ TodoInput.propTypes = {
   todoBeingEdited: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   todoItemText: PropTypes.string,
-  inProgress: PropTypes.bool,
+  fetching: PropTypes.bool,
   addTodoClick: PropTypes.func.isRequired
 };

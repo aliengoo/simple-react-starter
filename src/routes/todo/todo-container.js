@@ -3,26 +3,26 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {getSocket} from '../../../shared/socket';
+import {getSocket} from '../../shared/api/socket';
 
 
 // shared components
-import NavBar from '../../../shared/nav-bar';
-import Alert from '../../../shared/alert';
-import PageHeader from '../../../shared/page-header';
+import NavBar from '../../shared/components/nav-bar';
+import PageHeader from '../../shared/components/page-header';
+
+import ContainerFluid from '../../shared/components/container-fluid';
+import Container from '../../shared/components/container';
+import Col from '../../shared/components/col';
+import Row from '../../shared/components/row';
 
 // todo components
-import TodoInput from '../components/todo-input';
-import TodoList from '../components/todo-list';
-import ContainerFluid from '../../../shared/layout/container-fluid';
-import Container from '../../../shared/layout/container';
-import Col from '../../../shared/layout/col';
-import Row from '../../../shared/layout/row';
+import TodoInput from './components/todo-input';
+import TodoList from './components/todo-list';
 
 // actions
-import AsyncActions from '../actions/async-actions';
-import SyncActions from '../actions/sync-actions';
-import BroadcastActions from '../actions/broadcast-actions';
+import AsyncActions from './actions/async-actions';
+import SyncActions from './actions/sync-actions';
+import BroadcastActions from './actions/broadcast-actions';
 
 const {
   AddTodoAction,
@@ -91,7 +91,7 @@ class TodoContainer extends React.Component {
       todoBeingEdited,
       todoBeingEditedPriorState,
       todos,
-      inProgress,
+      fetching,
       activeTodoId,
       err,
       todoItemText} = this.props;
@@ -123,7 +123,7 @@ class TodoContainer extends React.Component {
                 addTodoClick={() => dispatch(AddTodoAction.create({
                 text: todoItemText
               }))}
-                inProgress={inProgress}
+                fetching={fetching}
                 todoItemText={todoItemText}/>
             </Col>
           </Row>
@@ -132,7 +132,7 @@ class TodoContainer extends React.Component {
             <Col media="sm" grid="12">
               <TodoList
                 todos={todos}
-                inProgress={inProgress}
+                fetching={fetching}
                 activeTodoId={activeTodoId}
                 todoBeingEdited={todoBeingEdited}
                 updateTodoBeingEditedTextChanged={(newText) => dispatch(UpdateTodoBeingEditedTextAction.create(newText))}
@@ -160,7 +160,7 @@ function select(state) {
     todoBeingEdited: state.todoBeingEdited,
     todoBeingEditedPriorState: state.todoBeingEditedPriorState,
     todos: state.todos,
-    inProgress: state.inProgress,
+    fetching: state.fetching,
     activeTodoId: state.activeTodoId,
     err: state.err
   };

@@ -14,11 +14,11 @@ import history from 'history/lib/createHashHistory';
 import { Provider } from 'react-redux';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
-import instance from './routes/todo/store/todo-store';
+import instance from './shared/store/app-store';
 
-import App from './routes/app/app.js';
-import TodoContainer from './routes/todo/containers/todo-container';
-import NoMatchContainer from './routes/no-match/containers/no-match-container';
+import TodoContainer from './routes/todo/todo-container';
+import ChatContainer from './routes/chat/chat-container';
+import NoMatchContainer from './routes/no-match/no-match-container';
 
 const store = instance();
 
@@ -27,6 +27,7 @@ var reactContainer = document.getElementById('react-container');
 var providerRoot = <Provider store={store}>
   <Router history={history()}>
     <Route path="/todo" component={TodoContainer}/>
+    <Route path="/chat" component={ChatContainer}/>
     <Route path="*" component={NoMatchContainer}/>
   </Router>
 </Provider>;
