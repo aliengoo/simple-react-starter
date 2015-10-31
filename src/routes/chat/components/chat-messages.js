@@ -14,8 +14,6 @@ export default class ChatMessages extends Component {
     );
 
     if (chatMessages && chatMessages.length > 0) {
-
-      console.log(chatMessages);
       items = chatMessages.map((chatMessage, key) =>
         (<ChatMessage chatMessage={chatMessage} chatUsername={chatUsername} key={key}/>)
       );

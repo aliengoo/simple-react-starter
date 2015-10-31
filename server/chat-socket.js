@@ -19,4 +19,10 @@ module.exports = function (socket) {
     socket.broadcast.emit("SendMessageActionBroadcastAction", response);
     callback(response);
   });
+
+  socket.on('WhoAmIAction', function (request, callback) {
+    callback({
+      data: socket.id
+    });
+  });
 };

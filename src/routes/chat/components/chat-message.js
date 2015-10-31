@@ -12,7 +12,7 @@ export default class ChatMessage extends Component {
         {chatMessage.username}
       </span>);
 
-    console.log(chatUsername, chatMessage.username);
+    console.log(`chatUsername=${chatUsername}, chatMessage.username=${chatMessage.username}`);
     if (chatUsername === chatMessage.username) {
       usernameContent = (
         <span className="label label-warning">

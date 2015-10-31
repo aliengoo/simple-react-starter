@@ -23,6 +23,7 @@ import ChatActions from './actions/chat-actions';
 
 const {
   SendMessageAction,
+  WhoAmIAction,
   SendMessageActionBroadcastAction,
   UserConnectedActionBroadcastAction,
   UserDisconnectedActionBroadcastAction
@@ -52,6 +53,10 @@ class ChatContainer extends React.Component {
     socket.on("UserDisconnectedActionBroadcastAction", (response) => {
       this.props.dispatch(UserDisconnectedActionBroadcastAction.create(response.data));
     });
+  }
+
+  componentDidMount() {
+    this.props.dispatch(WhoAmIAction.create());
   }
 
   render() {

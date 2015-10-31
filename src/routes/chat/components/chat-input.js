@@ -15,6 +15,7 @@ export default class ChatInput extends Component {
 
     if (e.keyCode === 13 && (val || "").length > 0) {
       this.props.sendMessage(val);
+      this.refs.chatInput.value = "";
     }
   }
 
