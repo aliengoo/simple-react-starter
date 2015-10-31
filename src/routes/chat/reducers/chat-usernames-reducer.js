@@ -5,6 +5,7 @@ import AsyncStatus from '../../../shared/api/async-status';
 import ChatActions from '../actions/chat-actions';
 
 const {
+  GetUsernamesAction,
   UserConnectedActionBroadcastAction,
   UserDisconnectedActionBroadcastAction
   } = ChatActions;
@@ -17,7 +18,14 @@ export default function chatUsernamesReducer(usernames = [], action) {
       newState = [...usernames, action.data];
       break;
     case UserDisconnectedActionBroadcastAction.type:
-      newState = [..._.filter(usernames, action.data)];
+      newState = [..._.filter(usernames, (username) => {
+        return username !== action.data;
+      })];
+      break;
+    case GetUsernamesAction.type:
+      if(action._asyncStatus === AsyncStatus.COMPLETE) {
+        newState = action.data;
+      }
       break;
   }
 

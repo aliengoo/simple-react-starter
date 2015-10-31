@@ -9,14 +9,13 @@ export default class ChatMessage extends Component {
 
     var usernameContent = (
       <span className="label label-info">
-        {chatMessage.username}
+        {chatMessage.username}:
       </span>);
 
-    console.log(`chatUsername=${chatUsername}, chatMessage.username=${chatMessage.username}`);
     if (chatUsername === chatMessage.username) {
       usernameContent = (
         <span className="label label-warning">
-          ME
+          Me:
         </span>);
     }
     return (

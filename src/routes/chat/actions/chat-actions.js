@@ -8,6 +8,9 @@ const SendMessageAction = AsyncActionCreator("SendMessageAction");
 
 const WhoAmIAction = AsyncActionCreator("WhoAmIAction");
 
+const GetUsernamesAction = AsyncActionCreator("GetUsernamesAction");
+
+const SetUsernameAction = AsyncActionCreator("SetUsernameAction");
 // receive messages from other connected users
 const SendMessageActionBroadcastAction = SyncActionCreator("SendMessageActionBroadcastAction");
 
@@ -20,6 +23,8 @@ const UserDisconnectedActionBroadcastAction = SyncActionCreator("UserDisconnecte
 export default {
   SendMessageAction,
   WhoAmIAction,
+  GetUsernamesAction,
+  SetUsernameAction,
   SendMessageActionBroadcastAction,
   UserConnectedActionBroadcastAction,
   UserDisconnectedActionBroadcastAction

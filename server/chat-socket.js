@@ -1,10 +1,23 @@
 "use strict";
 
+var Users = require('./users');
+
 module.exports = function (socket) {
 
   socket.on('disconnect', function () {
-    socket.broadcast.emit("UserDisconnectedActionBroadcastAction", {
-      data: socket.id
+    Users.userDisconnected(socket.id, function () {
+      socket.broadcast.emit("UserDisconnectedActionBroadcastAction", {
+        data: socket.id
+      });
+    });
+  });
+
+  socket.on('SetUsernameAction', function (request, callback) {
+    Users.setUsername(socket.id, request.data, function (err, connectedUser) {
+      callback({
+        err: err,
+        data: connectedUser
+      });
     });
   });
 
@@ -18,6 +31,17 @@ module.exports = function (socket) {
     };
     socket.broadcast.emit("SendMessageActionBroadcastAction", response);
     callback(response);
+  });
+
+  socket.on('GetUsernamesAction', function (request, callback) {
+
+    Users.getAllUsers(function (err, socketIds) {
+      var response = {
+        err: err,
+        data: socketIds
+      };
+      callback(response);
+    });
   });
 
   socket.on('WhoAmIAction', function (request, callback) {

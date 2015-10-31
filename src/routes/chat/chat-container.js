@@ -24,6 +24,8 @@ import ChatActions from './actions/chat-actions';
 const {
   SendMessageAction,
   WhoAmIAction,
+  GetUsernamesAction,
+  SetUsernameAction,
   SendMessageActionBroadcastAction,
   UserConnectedActionBroadcastAction,
   UserDisconnectedActionBroadcastAction
@@ -57,6 +59,7 @@ class ChatContainer extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(WhoAmIAction.create());
+    this.props.dispatch(GetUsernamesAction.create());
   }
 
   render() {

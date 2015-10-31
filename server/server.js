@@ -14,13 +14,23 @@ app.use(cors());
 
 var todoSocket = require('./todo-socket');
 var chatSocket = require('./chat-socket');
+var Users = require('./users');
+
+Users.clearAll(function (err) {
+  if (err) {
+    console.log("Server error", err);
+  } else {
+    console.log('all users cleared');
+  }
+});
 
 io.sockets.on('connection', function (socket) {
   todoSocket(socket);
   chatSocket(socket);
-
-  socket.broadcast.emit("UserConnectedActionBroadcastAction", {
-    data: socket.id
+  Users.userConnected(socket.id, function () {
+    socket.broadcast.emit("UserConnectedActionBroadcastAction", {
+      data: socket.id
+    });
   });
 });
 
