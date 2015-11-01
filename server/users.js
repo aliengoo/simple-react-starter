@@ -32,12 +32,18 @@ module.exports.setUsername = function (socketId, name, callback) {
       name: name
     }
   }, {
-    'new': true
-  }, callback);
+    'new': true,
+    upsert: false
+  }, function(err) {
+    callback(err, {
+      name: name,
+      socketId: socketId
+    });
+  });
 
 };
 
-module.exports.getAllUsers = function (callback) {
+module.exports.getUsers = function (callback) {
   ConnectedUser.find({}, function (err, connectedUsers) {
     if (err) {
       callback(err);
@@ -45,6 +51,12 @@ module.exports.getAllUsers = function (callback) {
       callback(undefined, connectedUsers);
     }
   });
+};
+
+module.exports.getUser = function(socketId, callback) {
+  ConnectedUser.findOne({
+    socketId: socketId
+  }, callback);
 };
 
 module.exports.clearAll = function (callback) {

@@ -7,29 +7,36 @@ import InputGroupBtn from '../../../shared/components/input-group-btn';
 export default class ChatUsername extends Component {
 
   render() {
-    const {fetching, setChatUsername} = this.props;
+    const {fetching, chatUser, setChatUsername} = this.props;
 
-    return (
-      <div>
-        <InputGroup>
-          <input type="text" className="form-control" maxLength={20}/>
-          <InputGroupBtn>
+    var content = (<div></div>);
 
-            <button
-              disabled={fetching}
-              className="btn btn-primary btn-lg"
-              type="button"
-              onClick={setChatUsername}>Set my name
-            </button>
+    if (!chatUser || !chatUser.name) {
+      content = (
+        <div>
+          <InputGroup>
+            <input type="text" ref="usernameInput" className="form-control" maxLength={20} placeholder="Enter your username"/>
+            <InputGroupBtn>
 
-          </InputGroupBtn>
-        </InputGroup>
-      </div>
-    );
+              <button
+                disabled={fetching}
+                className="btn btn-primary"
+                type="button"
+                onClick={() => setChatUsername(this.refs.usernameInput.value)}>Set
+              </button>
+
+            </InputGroupBtn>
+          </InputGroup>
+        </div>
+      );
+    }
+
+    return content;
   }
 }
 
 ChatUsername.propTypes = {
   fetching: PropTypes.bool,
+  chatUser: PropTypes.object,
   setChatUsername: PropTypes.func.isRequired
 };

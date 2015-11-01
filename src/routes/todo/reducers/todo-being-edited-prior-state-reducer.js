@@ -5,6 +5,7 @@ import _ from 'lodash';
 import AsyncStatus from '../../../shared/api/async-status';
 import SyncActions from '../actions/sync-actions';
 import AsyncActions from '../actions/async-actions';
+import TodoConfig from '../todo-config';
 
 const {UpdateTodoStartedAction, UpdateTodoAbortedAction} = SyncActions;
 const {UpdateTodoCommitAction} = AsyncActions;
@@ -20,16 +21,18 @@ export default function todoBeingEditedPriorStateReducer(todoBeingEditedPriorSta
 
   var newState = todoBeingEditedPriorState;
 
-  switch (action.type) {
-    case UpdateTodoStartedAction.type:
-      if (_.isObject(action.data)) {
-        newState = Object.assign({}, action.data);
-      }
-      break;
-    case UpdateTodoAbortedAction.type:
-    case UpdateTodoCommitAction.type:
-      newState = null;
-      break;
+  if (action.container === TodoConfig.container) {
+    switch (action.type) {
+      case UpdateTodoStartedAction.type:
+        if (_.isObject(action.data)) {
+          newState = Object.assign({}, action.data);
+        }
+        break;
+      case UpdateTodoAbortedAction.type:
+      case UpdateTodoCommitAction.type:
+        newState = null;
+        break;
+    }
   }
 
   return newState;

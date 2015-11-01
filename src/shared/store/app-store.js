@@ -8,8 +8,8 @@ import { devTools, persistState } from 'redux-devtools';
 
 const initialState = {
   chatMessages: [],
-  chatUsername: "",
-  chatUsernames: [],
+  chatUser: null,
+  chatUsers: [],
   todoItemText: "",
   fetching: false,
   activeTodoId: "",

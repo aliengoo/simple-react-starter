@@ -17,12 +17,17 @@ export default class ChatMessages extends Component {
 
   _trackScroll() {
     var chatMessages = this._getChatMessagesElement();
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if (chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
   }
 
   componentDidMount() {
     var chatMessages = this._getChatMessagesElement();
-    chatMessages.style.height = "500px";
+
+    if (chatMessages) {
+      chatMessages.style.height = "500px";
+    }
   }
 
   componentDidUpdate() {
@@ -30,29 +35,36 @@ export default class ChatMessages extends Component {
   }
 
   render() {
-    const {fetching, chatMessages, chatUsername} = this.props;
+    const {fetching, chatMessages, chatUser, chatUsers} = this.props;
 
-    var items = (
-      <div className="chat-messages-no-messages">
-        No messages
-      </div>
-    );
+    var content = <div></div>;
 
-    if (chatMessages && chatMessages.length > 0) {
-      items = chatMessages.map((chatMessage, key) =>
-        (<ChatMessage chatMessage={chatMessage} chatUsername={chatUsername} key={key}/>)
+    if (chatUser && chatUser.name) {
+      var items = (
+        <div className="chat-messages-no-messages">
+          No messages
+        </div>
       );
+
+      if (chatMessages && chatMessages.length > 0) {
+        items = chatMessages.map((chatMessage, key) =>
+          (<ChatMessage chatUsers={chatUsers} chatMessage={chatMessage} chatUser={chatUser} key={key}/>)
+        );
+      }
+
+      content = (
+        <div className="chat-messages" id="chat-messages">
+          {items}
+        </div>);
     }
 
-    return (
-      <div className="chat-messages" id="chat-messages">
-        {items}
-      </div>);
+    return content;
   }
 }
 
 ChatMessages.propTypes = {
   fetching: PropTypes.bool,
-  chatUsername: PropTypes.string.isRequired,
+  chatUser: PropTypes.object,
+  chatUsers: PropTypes.array,
   chatMessages: PropTypes.array
 };

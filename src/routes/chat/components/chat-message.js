@@ -1,18 +1,23 @@
 "use strict";
 
+import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 
 export default class ChatMessage extends Component {
 
   render() {
-    const {chatMessage, chatUsername} = this.props;
+    const {chatMessage, chatUser, chatUsers} = this.props;
+
+    var chatMessageUser = _.find(chatUsers, {
+      socketId: chatMessage.socketId
+    });
 
     var usernameContent = (
       <span className="label label-info">
-        {chatMessage.username}:
+        {chatMessageUser.name}:
       </span>);
 
-    if (chatUsername === chatMessage.username) {
+    if (chatUser.socketId === chatMessage.socketId) {
       usernameContent = (
         <span className="label label-warning">
           Me:
@@ -28,6 +33,7 @@ export default class ChatMessage extends Component {
 }
 
 ChatMessage.propTypes = {
-  chatUsername: PropTypes.string.isRequired,
+  chatUser: PropTypes.object.isRequired,
+  chatUsers: PropTypes.array.isRequired,
   chatMessage: PropTypes.object.isRequired
 };

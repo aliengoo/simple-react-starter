@@ -4,6 +4,7 @@ import AsyncStatus from '../../../shared/api/async-status';
 import AsyncActions from '../actions/async-actions';
 import SyncActions from '../actions/sync-actions';
 import BroadcastActions from '../actions/broadcast-actions';
+import TodoConfig from '../todo-config';
 
 import _ from 'lodash';
 
@@ -149,10 +150,13 @@ function removeTodoActionBroadcastActionReducer(todos = [], action) {
  */
 export default function todos(todos = [], action) {
 
+  if (action.container !== TodoConfig.container) {
+    return todos;
+  }
+
   switch (action.type) {
     case AddTodoAction.type:
       return addTodoActionReducer(todos, action);
-
     case CompleteTodoAction.type:
     case UncompleteTodoAction.type:
       return completeChangedTodoActionReducer(todos, action);

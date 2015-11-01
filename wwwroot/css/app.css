@@ -59,9 +59,13 @@ body {
   padding: 5px 0; }
 
 .chat-usernames {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1; }
+  -webkit-flex: 2;
+  -ms-flex: 2;
+  flex: 2;
+  border: 1px solid #b9b9b9;
+  border-radius: 5px;
+  padding: 3px;
+  margin-right: 10px; }
 
 .todo-list-item {
   list-style: none;

@@ -17,6 +17,7 @@ import Row from '../../shared/components/row';
 import ChatUsernames from './components/chat-usernames';
 import ChatInput from './components/chat-input';
 import ChatMessages from './components/chat-messages';
+import ChatUsername from './components/chat-username';
 
 // actions
 import ChatActions from './actions/chat-actions';
@@ -24,10 +25,10 @@ import ChatActions from './actions/chat-actions';
 const {
   SendMessageAction,
   WhoAmIAction,
-  GetUsernamesAction,
+  GetUsersAction,
   SetUsernameAction,
   SendMessageActionBroadcastAction,
-  UserConnectedActionBroadcastAction,
+  SetUsernameActionBroadcastAction,
   UserDisconnectedActionBroadcastAction
   } = ChatActions;
 
@@ -46,28 +47,26 @@ class ChatContainer extends React.Component {
       this.props.dispatch(SendMessageActionBroadcastAction.create(response.data));
     });
 
-    // these broadcast events are not related to an action, but a side-effect
-    // of connecting to the websocket server
-    socket.on("UserConnectedActionBroadcastAction", (response) => {
-      this.props.dispatch(UserConnectedActionBroadcastAction.create(response.data));
-    });
-
     socket.on("UserDisconnectedActionBroadcastAction", (response) => {
       this.props.dispatch(UserDisconnectedActionBroadcastAction.create(response.data));
+    });
+
+    socket.on("SetUsernameAction:broadcast", (response) => {
+      this.props.dispatch(SetUsernameActionBroadcastAction.create(response.data));
     });
   }
 
   componentDidMount() {
     this.props.dispatch(WhoAmIAction.create());
-    this.props.dispatch(GetUsernamesAction.create());
+    this.props.dispatch(GetUsersAction.create());
   }
 
   render() {
     const {
       dispatch,
       chatMessages,
-      chatUsername,
-      chatUsernames,
+      chatUser,
+      chatUsers,
       fetching,
       err} = this.props;
 
@@ -90,13 +89,24 @@ class ChatContainer extends React.Component {
             Chat room
           </PageHeader>
 
+          <div className="chat-username-parent">
+            <ChatUsername
+              fetching={fetching}
+              chatUser={chatUser}
+              setChatUsername={(username) => dispatch(SetUsernameAction.create(username))}/>
+          </div>
+
           <div className="chat-parent">
-            <ChatUsernames chatUsernames={chatUsernames} chatUsername={chatUsername} fetching={fetching}/>
+
+            <ChatUsernames
+              chatUsers={chatUsers}
+              chatUser={chatUser}
+              fetching={fetching}/>
 
             <div className="chat-content">
-              <ChatMessages chatMessages={chatMessages} fetching={fetching} chatUsername={chatUsername}/>
+              <ChatMessages chatMessages={chatMessages} chatUsers={chatUsers} fetching={fetching} chatUser={chatUser}/>
 
-              <ChatInput sendMessage={(message) => dispatch(SendMessageAction.create(message))} fetching={fetching}/>
+              <ChatInput chatUser={chatUser} sendMessage={(message) => dispatch(SendMessageAction.create(message))} fetching={fetching}/>
             </div>
           </div>
 
@@ -113,8 +123,8 @@ function select(state) {
 
   return {
     chatMessages: state.chatMessages,
-    chatUsername: state.chatUsername,
-    chatUsernames: state.chatUsernames,
+    chatUser: state.chatUser,
+    chatUsers: state.chatUsers,
     fetching: state.fetching,
     err: state.err
   };

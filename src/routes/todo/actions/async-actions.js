@@ -2,21 +2,22 @@
 
 import AsyncStatus from '../../../shared/api/async-status';
 import AsyncActionCreator from '../../../shared/actions/async-action-creator';
+import TodoConfig from '../todo-config';
 
 // data {text}
-const AddTodoAction =  AsyncActionCreator("AddTodoAction");
+const AddTodoAction = AsyncActionCreator("AddTodoAction", TodoConfig.container);
 // data {id}
-const CompleteTodoAction = AsyncActionCreator("CompleteTodoAction");
+const CompleteTodoAction = AsyncActionCreator("CompleteTodoAction", TodoConfig.container);
 // data {id}
-const UncompleteTodoAction = AsyncActionCreator("UncompleteTodoAction");
+const UncompleteTodoAction = AsyncActionCreator("UncompleteTodoAction", TodoConfig.container);
 // data {id}
-const RemoveTodoAction = AsyncActionCreator("RemoveTodoAction");
+const RemoveTodoAction = AsyncActionCreator("RemoveTodoAction", TodoConfig.container);
 // data {_id, text}
-const UpdateTodoCommitAction = AsyncActionCreator("UpdateTodoCommitAction");
+const UpdateTodoCommitAction = AsyncActionCreator("UpdateTodoCommitAction", TodoConfig.container);
 // data {}
-const GetAllTodosAction = AsyncActionCreator("GetAllTodosAction");
+const GetAllTodosAction = AsyncActionCreator("GetAllTodosAction", TodoConfig.container);
 // data {id}
-const GetTodoAction = AsyncActionCreator("GetTodoAction");
+const GetTodoAction = AsyncActionCreator("GetTodoAction", TodoConfig.container);
 
 export default {
   GetTodoAction,

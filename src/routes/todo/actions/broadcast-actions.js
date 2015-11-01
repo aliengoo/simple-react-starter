@@ -1,12 +1,18 @@
 "use strict";
 
 import SyncActionCreator from '../../../shared/actions/sync-action-creator';
+import TodoConfig from '../todo-config';
 
-const AddTodoActionBroadcastAction = SyncActionCreator("AddTodoActionBroadcastAction");
-const UpdateTodoCommitActionBroadcastAction = SyncActionCreator("UpdateTodoCommitActionBroadcastAction");
-const RemoveTodoActionBroadcastAction = SyncActionCreator("RemoveTodoActionBroadcastAction");
-const CompleteTodoActionBroadcastAction = SyncActionCreator("CompleteTodoActionBroadcastAction");
-const UncompleteTodoActionBroadcastAction = SyncActionCreator("UncompleteTodoActionBroadcastAction");
+const AddTodoActionBroadcastAction
+  = SyncActionCreator("AddTodoActionBroadcastAction", TodoConfig.container);
+const UpdateTodoCommitActionBroadcastAction
+  = SyncActionCreator("UpdateTodoCommitActionBroadcastAction", TodoConfig.container);
+const RemoveTodoActionBroadcastAction
+  = SyncActionCreator("RemoveTodoActionBroadcastAction", TodoConfig.container);
+const CompleteTodoActionBroadcastAction
+  = SyncActionCreator("CompleteTodoActionBroadcastAction", TodoConfig.container);
+const UncompleteTodoActionBroadcastAction
+  = SyncActionCreator("UncompleteTodoActionBroadcastAction", TodoConfig.container);
 
 export default {
   AddTodoActionBroadcastAction,

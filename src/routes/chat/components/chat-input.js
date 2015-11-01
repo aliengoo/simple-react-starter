@@ -20,14 +20,23 @@ export default class ChatInput extends Component {
   }
 
   render() {
-    return (
-      <div className="chat-input">
-        <input className="form-control" onKeyDown={this._onKeyDown} ref="chatInput" maxLength="140" placeholder="Say something..."/>
-      </div>);
+    const {chatUser} = this.props;
+
+    var content = (<div></div>);
+
+    if (chatUser && chatUser.name) {
+      content = (
+        <div className="chat-input">
+          <input className="form-control" onKeyDown={this._onKeyDown} ref="chatInput" maxLength="140" placeholder="Say something..."/>
+        </div>);
+    }
+
+    return content;
   }
 }
 
 ChatInput.propTypes = {
   fetching: PropTypes.bool,
+  chatUser: PropTypes.object,
   sendMessage: PropTypes.func.isRequired
 };

@@ -18,6 +18,13 @@ module.exports = function (socket) {
         err: err,
         data: connectedUser
       });
+
+      if (!err) {
+        socket.broadcast.emit("SetUsernameAction:broadcast", {
+          data: connectedUser
+        });
+      }
+
     });
   });
 
@@ -25,7 +32,7 @@ module.exports = function (socket) {
 
     var response = {
       data: {
-        username: socket.id,
+        socketId: socket.id,
         message: request.data
       }
     };
@@ -33,20 +40,23 @@ module.exports = function (socket) {
     callback(response);
   });
 
-  socket.on('GetUsernamesAction', function (request, callback) {
+  socket.on('GetUsersAction', function (request, callback) {
 
-    Users.getAllUsers(function (err, socketIds) {
+    Users.getUsers(function (err, users) {
       var response = {
         err: err,
-        data: socketIds
+        data: users
       };
       callback(response);
     });
   });
 
   socket.on('WhoAmIAction', function (request, callback) {
-    callback({
-      data: socket.id
+    Users.getUser(socket.id, function(err, connectedUser) {
+      callback({
+        err: err,
+        data: connectedUser
+      });
     });
   });
 };

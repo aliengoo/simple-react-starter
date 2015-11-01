@@ -1,5 +1,6 @@
 // chat-config
 
 export default {
-  messageBufferSize: 50
+  messageBufferSize: 50,
+  container: "chat"
 };

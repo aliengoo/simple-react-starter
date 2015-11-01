@@ -13,21 +13,25 @@ function queue(messages, message) {
   if (_queue.length > ChatConfig.messageBufferSize) {
     _queue.shift();
   }
+
   return _queue;
 }
 
 export default function chatMessages(messages = [], action) {
 
   var newState = messages;
-  switch (action.type) {
-    case SendMessageAction.type:
-      if (action._asyncStatus === AsyncStatus.COMPLETE && action.data) {
+
+  if (action.container === ChatConfig.container) {
+    switch (action.type) {
+      case SendMessageAction.type:
+        if (action._asyncStatus === AsyncStatus.COMPLETE && action.data) {
+          newState = queue(messages, action.data);
+        }
+        break;
+      case SendMessageActionBroadcastAction.type:
         newState = queue(messages, action.data);
-      }
-      break;
-    case SendMessageActionBroadcastAction.type:
-      newState = queue(messages, action.data);
-      break;
+        break;
+    }
   }
 
   return newState;

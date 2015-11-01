@@ -7,10 +7,11 @@ import {createHandlers} from '../api/async-status-handlers';
 import {getSocket} from '../api/socket';
 
 
-export default function creator(type) {
+export default function creator(type, container) {
   return {
     create: (data) => createEmit(type, data),
-    type
+    type,
+    container
   };
 }
 
